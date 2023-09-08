@@ -1,0 +1,10 @@
+version: "3"
+services:
+  db:
+    image: postgres:alpine
+    environment:
+      POSTGRES_PASSWORD: harshit@20002
+      POSTGRES_USER: harshit
+      POSTGRES_DB: money-order
+    ports:
+      - "5432:5432"

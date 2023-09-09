@@ -1,15 +1,12 @@
-const { Client } = require('pg');
+const { Pool } = require('pg');
+require('dotenv').config();
 
-const client  = new Client({
-    user: 'harshit',
-    host: 'localhost',
-    database: 'money-order',
-    password: 'harshit@20002',
-    port: 5432
+const pool = new Pool({
+    user: process.env.DB_USER,
+    host: process.env.DB_HOST,
+    database: process.env.DB_NAME,
+    password: process.env.DB_PASSWORD,
+    port: process.env.DB_PORT,
 });
 
-client.connect((err) => {
-    if(err) console.log(err.message);
-});
-
-module.exports = {client};
+module.exports = pool;

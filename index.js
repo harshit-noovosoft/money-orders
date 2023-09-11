@@ -2,7 +2,6 @@ import express from 'express';
 import dotenv from "dotenv"
 import cookieParser from 'cookie-parser';
 import path from 'path';
-import jwt from "jsonwebtoken";
 const __dirname = path.resolve();
 dotenv.config();
 
@@ -18,7 +17,6 @@ app.use("/authentication" , authentication);
 app.use("/transaction" , transaction);
 
 app.use((req,res,next)=>{
-    res.clearCookie('access_token');
     const token = req.cookies['access_token'];
     if(!token) {
         return res.redirect('/authentication/login');

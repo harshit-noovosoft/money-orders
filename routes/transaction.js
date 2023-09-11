@@ -31,7 +31,7 @@ router.get('/' , async (req,res)=>{
                                                           as from_user,
                                                       (SELECT username from users 
                                                                        where user_id = transactions.to_user_id)   
-                                                          as to_user
+                                                          as to_user, amount
                                                from transactions`);
         res.send(transactions.rows);
     }catch (err){

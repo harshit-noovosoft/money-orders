@@ -12,7 +12,7 @@ router.use((req,res,next)=>{
 
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, payload) => {
         if (err || payload.role !== 'admin') {
-            return res.status(401).json(err.message || "You are not admin");
+            return res.status(401).json("You are not admin");
         }
         req.user = {
             username: payload.username,
@@ -33,7 +33,7 @@ router.get('/' , async (req,res)=>{
                                                                        where user_id = transactions.to_user_id)   
                                                           as to_user
                                                from transactions`);
-        res.send("Harshit");
+        res.send(transactions.rows);
     }catch (err){
         res.status(err.status || 400).send(err.message);
     }

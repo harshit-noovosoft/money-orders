@@ -19,7 +19,7 @@
 <body>
 <div class="container">
     <h2 class="text-center">Login</h2>
-    <form>
+    <form action="/authentication/login" method="post">
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" class="form-control" id="username" placeholder="Enter Username" name="username">
@@ -33,33 +33,6 @@
         <button type="submit" class="btn btn-primary btn-register" id="submit-btn">Login</button>
     </form>
 </div>
-
-<script>
-    document.getElementById('submit-btn').addEventListener('click',async function (e){
-        e.preventDefault();
-
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-
-        const formData = {
-            username: username,
-            password: password
-        }
-
-        await fetch('http://localhost:3000/authentication/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json' // Specify that you're sending JSON data
-            },
-            body: formData // Convert the JSON object to a JSON string
-        }).then(res => {
-            console.log(res);
-        })
-            .catch(err => {
-            alert(err.message);
-        });
-    });
-</script>
 
 </body>
 </html>

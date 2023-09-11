@@ -6,11 +6,10 @@ import path from 'path';
 const __dirname = path.resolve();
 
 const router = express.Router();
-router.use(express.json());
+router.use(express.urlencoded({extended: true}));
 router.use(express.static('./public'));
 
 router.get('/login',(req,res)=>{
-    console.log("kjdslfkjd");
     res.sendFile(path.join(__dirname , './public/login.html'));
 });
 router.get('/register',(req,res)=>{
@@ -19,7 +18,6 @@ router.get('/register',(req,res)=>{
 
 router.post('/login', async (req,res)=>{
     const {username , password} = req.body;
-    console.log("heriki");
     const client = await pool.connect();
     try{
         const user = await client.query(`SELECT *
@@ -34,7 +32,6 @@ router.post('/login', async (req,res)=>{
         const token = jwt.sign({"username" : username , "role": role}, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
         res.cookie('access_token' , token , {httpOnly:true});
         res.redirect('/');
-
     }catch (err) {
         res.status(err.status || 400).send(err.message);
     }

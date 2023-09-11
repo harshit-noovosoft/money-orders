@@ -16,67 +16,68 @@
 </head>
 <body>
 
-    <div class="container">
-        <div class="flex">
-            <div class="transaction_data">
-                <table class="transaction_table" id="transaction_data">
-                    <tr>
-                        <th>Type</th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Amount</th>
-                    </tr>
-                </table>
+<div class="container">
+    <div class="flex">
+        <div class="transaction_data">
+            <h2 class="heading">Transaction History</h2>
+            <table class="transaction_table" id="transaction_data">
+                <tr>
+                    <th>Type</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Amount</th>
+                </tr>
+            </table>
+        </div>
+        <div class="transactions">
+            <div class="deposit">
+                <h2>Deposit Amount</h2>
+                <div class="deposit_data">
+                    <form id="deposit_form">
+                        <label for="deposit_userId">To:</label>
+                        <select id="deposit_userId">
+                            <option value="1">Tarang</option>
+                        </select>
+                        <label for="deposit_amount">Amount:</label>
+                        <input type="text" id="deposit_amount" name="amount"> <br><br>
+                        <input type="submit" name="Make Transaction">
+                    </form>
+                </div>
             </div>
-            <div class="transactions">
-                <div class="deposit">
-                    <h2>Deposit Amount</h2>
-                    <div class="deposit_data">
-                        <form action="">
-                            <label for="deposit_users">To:</label>
-                            <select id="deposit_users" name="username">
-                            </select>
-                            <label for="deposit_amount">Amount:</label>
-                            <input type="text" id="deposit_amount" name="amount">
-                            <input type="submit" name="Make Transaction">
-                        </form>
-                    </div>
+            <div class="withdraw">
+                <h2>Withdraw Amount</h2>
+                <div class="withdraw_data">
+                    <form id="withdraw_form">
+                        <label for="withdraw_userId">From:</label>
+                        <select id="withdraw_userId">
+                        </select>
+                        <label for="withdraw_amount">Amount:</label>
+                        <input type="text" id="withdraw_amount" name="amount"> <br><br>
+                        <input type="submit">
+                    </form>
                 </div>
-                <div class="withdraw">
-                    <h2>Withdraw Amount</h2>
-                    <div class="withdraw_data">
-                        <form action="">
-                            <label for="withdraw_users">From:</label>
-                            <select id="withdraw_users" name="username">
-                            </select>
-                            <label for="withdraw_amount">Amount:</label>
-                            <input type="text" id="withdraw_amount" name="amount">
-                            <input type="submit" name="Make Transaction">
-                        </form>
-                    </div>
-                </div>
-                <div class="transfer">
-                    <h2>Transfer Amount</h2>
-                    <div class="transfer_data">
-                        <form action="">
-                            <label for="transfer_deposit_users">To:</label>
-                            <select id="transfer_deposit_users" name="to_username">
-                            </select>
-                            <label for="transfer_withdraw_users">From:</label>
-                            <select id="transfer_withdraw_users" name="from_username">
-                            </select>
-                            <label for="transfer_amount">Amount:</label>
-                            <input type="text" id="transfer_amount" name="amount">
-                            <input type="submit" name="Make Transaction">
-                        </form>
-                    </div>
+            </div>
+            <div class="transfer">
+                <h2>Transfer Amount</h2>
+                <div class="transfer_data">
+                    <form id="transfer_form">
+                        <label for="transfer_deposit_userId">To:</label>
+                        <select id="transfer_deposit_userId" name="to_username">
+                        </select>
+                        <label for="transfer_withdraw_userId">From:</label>
+                        <select id="transfer_withdraw_userId" name="from_username">
+                        </select><br><br>
+                        <label for="transfer_amount">Amount:</label>
+                        <input type="text" id="transfer_amount" name="amount"> <br><br>
+                        <input type="submit" name="Make Transaction">
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    <script>
+</div>
 
-    </script>
+<script src="./transactions.js"></script>
 
 </body>
 </html>

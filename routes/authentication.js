@@ -26,7 +26,8 @@ router.post('/login', async (req,res)=>{
         );
         const userPassword = user.rows[0].password;
         const role = user.rows[0].role;
-        if(!bcrypt.compare(password,userPassword)){
+        if(!(await bcrypt.compare(password,userPassword))){
+
             return res.status(400).send("Invalid Password");
         }
         const token = jwt.sign({"username" : username , "role": role}, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
@@ -49,7 +50,7 @@ router.post('/register' , async (req,res)=>{
                         values ($1,$2,$3)`,
            [username,email,hash_password]
        );
-       res.send("Data successfully entered in Database");
+       res.redirect('/authentication/login');
    }catch (err){
        res.status(err.status || 400).send(err.message);
    }

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+
+    <!-- Add your custom CSS here -->
+    <link rel="stylesheet" href="./home.css">
+
+    <!-- Google Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+    <div class="container">
+        <div class="flex">
+            <div class="transaction_data">
+                <table class="transaction_table" id="transaction_data">
+                    <tr>
+                        <th>Type</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Amount</th>
+                    </tr>
+                </table>
+            </div>
+            <div class="transactions">
+                <div class="deposit">
+                    <h2>Deposit Amount</h2>
+                    <div class="deposit_data">
+                        <form action="">
+                            <label for="deposit_users">To:</label>
+                            <select id="deposit_users" name="username">
+                            </select>
+                            <label for="deposit_amount">Amount:</label>
+                            <input type="text" id="deposit_amount" name="amount">
+                            <input type="submit" name="Make Transaction">
+                        </form>
+                    </div>
+                </div>
+                <div class="withdraw">
+                    <h2>Withdraw Amount</h2>
+                    <div class="withdraw_data">
+                        <form action="">
+                            <label for="withdraw_users">From:</label>
+                            <select id="withdraw_users" name="username">
+                            </select>
+                            <label for="withdraw_amount">Amount:</label>
+                            <input type="text" id="withdraw_amount" name="amount">
+                            <input type="submit" name="Make Transaction">
+                        </form>
+                    </div>
+                </div>
+                <div class="transfer">
+                    <h2>Transfer Amount</h2>
+                    <div class="transfer_data">
+                        <form action="">
+                            <label for="transfer_deposit_users">To:</label>
+                            <select id="transfer_deposit_users" name="to_username">
+                            </select>
+                            <label for="transfer_withdraw_users">From:</label>
+                            <select id="transfer_withdraw_users" name="from_username">
+                            </select>
+                            <label for="transfer_amount">Amount:</label>
+                            <input type="text" id="transfer_amount" name="amount">
+                            <input type="submit" name="Make Transaction">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function showTransaction() {
+            fetch('/transaction').then(data => {return data.json()})
+                                 .then(res => {console.log(res)});
+        }
+        showTransaction();
+    </script>
+
+</body>
+</html>

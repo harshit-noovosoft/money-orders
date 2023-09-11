@@ -2,16 +2,25 @@ import express from "express";
 import bcrypt from "bcrypt";
 import pool from "../database_connection.js";
 import jwt from "jsonwebtoken";
+import path from 'path';
+const __dirname = path.resolve();
 
 const router = express.Router();
 router.use(express.json());
-router.use(express.static('../public'));
+router.use(express.static('./public'));
 
+router.get('/login',(req,res)=>{
+    console.log("kjdslfkjd");
+    res.sendFile(path.join(__dirname , './public/login.html'));
+});
+router.get('/register',(req,res)=>{
+    res.sendFile(path.join(__dirname , './public/register.html'));
+});
 
 router.post('/login', async (req,res)=>{
     const {username , password} = req.body;
+    console.log("heriki");
     const client = await pool.connect();
-    console.log("Hello world");
     try{
         const user = await client.query(`SELECT *
                                          FROM users
@@ -22,9 +31,9 @@ router.post('/login', async (req,res)=>{
         if(!bcrypt.compare(password,userPassword)){
             return res.status(400).send("Invalid Password");
         }
-        const token = jwt.sign({"username" : username , "role": role}, process.env.JWT_SECRET_KEY, {expiresIn: '1m'});
+        const token = jwt.sign({"username" : username , "role": role}, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
         res.cookie('access_token' , token , {httpOnly:true});
-        res.send("Log in Successfully");
+        res.redirect('/');
 
     }catch (err) {
         res.status(err.status || 400).send(err.message);
@@ -38,16 +47,13 @@ router.post('/register' , async (req,res)=>{
 
    try{
        const hash_password = await bcrypt.hash(password,10);
-       await client.query('BEGIN');
        await client.query(`Insert into users (
                    username, email, password) 
                         values ($1,$2,$3)`,
            [username,email,hash_password]
        );
-       await client.query('COMMIT');
        res.send("Data successfully entered in Database");
    }catch (err){
-       await client.query('ROLLBACK');
        res.status(err.status || 400).send(err.message);
    }
     client.end();

@@ -1,0 +1,43 @@
+body {
+    background-color: #78C1F3;
+    font-family: 'Poppins', sans-serif;
+}
+
+.container{
+    margin: 40px;
+}
+
+.flex{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.transaction_data{
+    margin: 50px;
+}
+table{
+    background-color: white;
+    border-radius: 5px;
+}
+
+th{
+    padding: 5px 40px;
+}
+.transactions{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.deposit,.withdraw,.transfer{
+    margin: 20px;
+    background-color: white;
+    text-align: center;
+    padding: 30px 20px;
+    border-radius: 10px;
+}
+
+select,input{
+    margin: 0 10px;
+}

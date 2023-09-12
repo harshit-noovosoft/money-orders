@@ -13,7 +13,7 @@ function addCell(value) {
 }
 
 
-function addTableRows(res){
+function addTableRows(res,role){
     const transactions =  res
     const tbl = document.getElementById('transaction_data');
     const previousRows = tbl.querySelector("tbody")
@@ -32,11 +32,15 @@ function addTableRows(res){
 
         tblBody.appendChild(row);
     })
-
     tbl.appendChild(tblBody);
+
+    if(role !== 'admin') {
+        const element = document.getElementById('transactions');
+        element.remove();
+    }
 }
 loadTransactions().then((res) => {
-    addTableRows(res)
+    addTableRows(res.data , res.role);
 })
 
 async function helper(type, amount, {to_user_id = null, from_user_id = null}) {
@@ -54,7 +58,7 @@ async function helper(type, amount, {to_user_id = null, from_user_id = null}) {
         body: JSON.stringify(data)
     }).then(ress => {
         loadTransactions().then((res) => {
-            addTableRows(res)
+            addTableRows(res.data);
         })
         return ress.json();
     })

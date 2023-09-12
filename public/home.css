@@ -26,6 +26,21 @@ body {
 .transaction_data{
     margin: 50px;
 }
+
+.transaction_data div {
+    overflow: hidden;
+    overflow-y: scroll;
+    max-height: 22rem;
+    min-height: 1rem;
+}
+
+.transaction_table thead {
+    top: 0;
+    position: sticky;
+    z-index: 1111;
+    background-color: #78C1F3;
+
+}
 table{
     background-color: var(--heading-color);
     border-radius: 5px;

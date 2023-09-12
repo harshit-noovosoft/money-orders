@@ -24,14 +24,14 @@ router.use((req,res,next)=>{
 
 router.get('/' , async (req,res)=>{
     try{
-        const transactions = await pool.query(`SELECT transaction_id,
-                                                      transaction_type,
+        const transactions = await pool.query(`SELECT transactions.transaction_id,
+                                                      transactions.transaction_type,
                                                       (SELECT username from users 
                                                                        where user_id = transactions.from_user_id) 
                                                           as from_user,
                                                       (SELECT username from users 
                                                                        where user_id = transactions.to_user_id)   
-                                                          as to_user, amount
+                                                          as to_user, transactions.amount
                                                from transactions`);
         res.send(transactions.rows);
     }catch (err){

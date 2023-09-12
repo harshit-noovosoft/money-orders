@@ -20,16 +20,15 @@ function addTableRows(res){
     transactions.slice(-10).reverse().forEach((transaction) => {
         const row = document.createElement("tr");
 
-        row.appendChild(addCell(transaction.transaction_type))
-        row.appendChild(addCell(transaction.from_user))
-        row.appendChild(addCell(transaction.to_user))
-        row.appendChild(addCell(transaction.amount))
+        row.appendChild(addCell(transaction.transaction_type.toUpperCase()));
+        row.appendChild(addCell(transaction.from_user || "-"));
+        row.appendChild(addCell(transaction.to_user || "-"));
+        row.appendChild(addCell(transaction.amount));
 
         tblBody.appendChild(row);
     })
 
     tbl.appendChild(tblBody);
-    document.body.appendChild(tbl);
 }
 loadTransactions().then((res) => {
     addTableRows(res)

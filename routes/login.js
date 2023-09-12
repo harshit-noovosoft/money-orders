@@ -7,10 +7,14 @@ const __dirname = path.resolve();
 
 const router = express.Router();
 router.use(express.urlencoded({extended: true}));
-router.use(express.static('./public'));
+router.use(express.static('public'));
 
+router.get('/',(req,res)=>{
+    console.log('login')
+    res.sendFile(path.join(__dirname , './public/login.html'));
+});
 
-router.post('/login', async (req,res)=>{
+router.post('/', async (req,res)=>{
     const {username , password} = req.body;
     const client = await pool.connect();
     try{
@@ -25,30 +29,11 @@ router.post('/login', async (req,res)=>{
         }
         const token = jwt.sign({"username" : username , "role": role}, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
         res.cookie('access_token' , token , {httpOnly:true});
-        res.redirect('/');
+        res.redirect('/dashboard');
     }catch (err) {
         res.status(err.status || 400).send(err.message);
     }
     client.end();
 });
-
-router.post('/register' , async (req,res)=>{
-    const {username , email , password} = req.body;
-    const client = await pool.connect();
-
-   try{
-       const hash_password = await bcrypt.hash(password,10);
-       await client.query(`Insert into users (
-                   username, email, password) 
-                        values ($1,$2,$3)`,
-           [username,email,hash_password]
-       );
-       res.redirect('/login.html');
-   }catch (err){
-       res.status(err.status || 400).send(err.message);
-   }
-    client.end();
-});
-
 
 export default router;

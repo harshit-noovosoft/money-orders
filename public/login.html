@@ -19,7 +19,7 @@
 <body>
 <div class="container">
     <h2 class="text-center">Login</h2>
-    <form action="/authentication/login" method="post">
+    <form action="/login" method="post">
         <div class="form-group">
             <label for="username">Username</label>
             <input type="text" class="form-control" id="username" placeholder="Enter Username" name="username">
@@ -28,7 +28,7 @@
             <label for="password">Password</label>
             <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
             <br>
-            <span>Don't Have an account? <a href="./register.html"> Register </a></span>
+            <span>Don't Have an account? <a href="/register"> Register </a></span>
         </div>
         <button type="submit" class="btn btn-primary btn-register" id="submit-btn">Login</button>
     </form>

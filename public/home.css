@@ -1,6 +1,12 @@
-body {
-    background-color: #f1f1f1;
+:root{
+    --body-bg-color: #f1f1f1;
+    --heading-color: #78C1F3;
+    --hover-bg-color: #c1c1c1;
     font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: var(--body-bg-color);
 }
 .heading{
     text-align: center;
@@ -21,7 +27,7 @@ body {
     margin: 50px;
 }
 table{
-    background-color: #78C1F3;
+    background-color: var(--heading-color);
     border-radius: 5px;
 }
 
@@ -37,7 +43,7 @@ th,td{
 .deposit,.withdraw,.transfer{
     width: 100%;
     margin: 20px;
-    background-color: #78C1F3;
+    background-color: var(--heading-color);
     text-align: center;
     padding: 10px 10px;
     border-radius: 10px;
@@ -49,7 +55,7 @@ input[type=text]{
 
 input[type=submit]{
     padding: 10px 20px;
-    background-color: #f1f1f1;
+    background-color: var(--body-bg-color);
     border: none;
     border-radius: 5px;
     color: black;
@@ -57,7 +63,7 @@ input[type=submit]{
 }
 
 input[type=submit]:hover{
-    background-color: #c1c1c1;
+    background-color: var(--hover-bg-color);
 }
 select{
     width: 20%;

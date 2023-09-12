@@ -5,40 +5,53 @@ async function loadTransactions() {
     return await response.json();
 }
 
+function addCell(value) {
+    const cell = document.createElement("td");
+    const cellText = document.createTextNode(value);
+    cell.appendChild(cellText);
+    return cell
+}
 loadTransactions().then((res) => {
-    const transactions = res
+    const transactions =  res
     const tbl = document.getElementById('transaction_data');
     const tblBody = document.createElement("tbody");
 
-    transactions.forEach((transaction) => {
-        console.log(transaction)
+    transactions.slice(-10).forEach((transaction) => {
         const row = document.createElement("tr");
 
-        const cell = document.createElement("td");
-        const cellText = document.createTextNode(transaction.transaction_type);
-        cell.appendChild(cellText);
-
-        const cell2 = document.createElement("td");
-        const cellText2 = document.createTextNode(transaction.from_user);
-        cell2.appendChild(cellText2);
-
-        const cell3 = document.createElement("td");
-        const cellText3 = document.createTextNode(transaction.to_user);
-        cell3.appendChild(cellText3);
-
-        const cell4 = document.createElement("td");
-        const cellText4 = document.createTextNode(transaction.amount);
-        cell4.appendChild(cellText4);
-
-        row.appendChild(cell);
-        row.appendChild(cell2);
-        row.appendChild(cell3);
-        row.appendChild(cell4);
+        row.appendChild(addCell(transaction.transaction_type))
+        row.appendChild(addCell(transaction.from_user))
+        row.appendChild(addCell(transaction.to_user))
+        row.appendChild(addCell(transaction.amount))
 
         tblBody.appendChild(row);
     })
 
     tbl.appendChild(tblBody);
     document.body.appendChild(tbl);
+})
 
+async function loadUsers() {
+    const response = await fetch(BASE_URL + "users");
+    return await response.json();
+}
+
+function addOptions(res, select) {
+    res.forEach((user) => {
+        const option = document.createElement("option")
+        option.value = user.user_id;
+        option.text = user.username;
+        select.add(option)
+    })
+}
+loadUsers().then((res) => {
+    console.log(res)
+    const deposit = document.getElementById('deposit_users')
+    const withdraw = document.getElementById('withdraw_users')
+    const transferTo = document.getElementById('transfer_deposit_users')
+    const transferFrom = document.getElementById('transfer_withdraw_users')
+    addOptions(res, deposit)
+    addOptions(res, withdraw)
+    addOptions(res, transferTo)
+    addOptions(res, transferFrom)
 })

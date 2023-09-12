@@ -9,12 +9,6 @@ const router = express.Router();
 router.use(express.urlencoded({extended: true}));
 router.use(express.static('./public'));
 
-router.get('/login',(req,res)=>{
-    res.sendFile(path.join(__dirname , './public/login.html'));
-});
-router.get('/register',(req,res)=>{
-    res.sendFile(path.join(__dirname , './public/register.html'));
-});
 
 router.post('/login', async (req,res)=>{
     const {username , password} = req.body;
@@ -50,7 +44,7 @@ router.post('/register' , async (req,res)=>{
                         values ($1,$2,$3)`,
            [username,email,hash_password]
        );
-       res.redirect('/authentication/login');
+       res.redirect('/login.html');
    }catch (err){
        res.status(err.status || 400).send(err.message);
    }

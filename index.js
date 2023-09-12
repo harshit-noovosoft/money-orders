@@ -20,13 +20,9 @@ app.use("/transaction" , transaction);
 app.use((req,res,next)=>{
     const token = req.cookies['access_token'];
     if(!token) {
-        return res.redirect('/authentication/login');
+        return res.redirect('/login.html');
     }
     next();
-});
-
-app.get('/',(req,res)=>{
-    res.sendFile(path.join(__dirname , './public/home.html'));
 });
 
 app.listen(process.env.PORT , (req,res)=>{

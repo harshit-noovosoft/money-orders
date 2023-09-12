@@ -12,9 +12,14 @@ function addCell(value) {
     return cell
 }
 
+
 function addTableRows(res){
     const transactions =  res
     const tbl = document.getElementById('transaction_data');
+    const previousRows = tbl.querySelector("tbody")
+    if(previousRows) {
+        previousRows.remove()
+    }
     const tblBody = document.createElement("tbody");
 
     transactions.slice(-10).reverse().forEach((transaction) => {

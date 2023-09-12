@@ -13,9 +13,11 @@ app.use(express.static('public'));
 
 import authentication from "./routes/authentication.js";
 import transaction from "./routes/transaction.js";
+import users from "./routes/users.js";
 
 app.use("/authentication" , authentication);
 app.use("/transaction" , transaction);
+app.use("/users" , users);
 
 app.use((req,res,next)=>{
     const token = req.cookies['access_token'];

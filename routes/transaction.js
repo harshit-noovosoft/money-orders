@@ -3,7 +3,7 @@ import pool from "../database_connection.js";
 import jwt from "jsonwebtoken";
 
 const router = express.Router();
-router.use(express.json());
+
 router.use((req,res,next)=>{
     const token = req.cookies['access_token'];
     if(!token) {
@@ -31,8 +31,7 @@ router.get('/' , async (req,res)=>{
                                                           as from_user,
                                                       (SELECT username from users 
                                                                        where user_id = transactions.to_user_id)   
-                                                          as to_user,
-                                                      amount
+                                                          as to_user, amount
                                                from transactions`);
         res.send(transactions.rows);
     }catch (err){
@@ -44,11 +43,11 @@ router.post('/' , async (req,res)=>{
     const { from_user_id , amount , type , to_user_id} = req.body;
     try{
         await pool.query(`Insert into transactions (
-                   transaction_type, from_user_id, to_user_id,amount)
+                   transaction_type, from_user_id, to_user_id,amount) 
                         values ($1,$2,$3,$4)`,
             [type,from_user_id,to_user_id,amount]
         );
-        res.send("Transaction Successfull");
+        res.send({message: "Transaction Successfull"});
     }catch (err){
         res.status(err.status || 500).send(err.message);
     }

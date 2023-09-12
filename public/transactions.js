@@ -1,4 +1,39 @@
-const BASE_URL = 'http://localhost:3000/';
+const BASE_URL = "http://localhost:3000/"
+
+async function loadTransactions() {
+    const response = await fetch(BASE_URL + "transaction");
+    return await response.json();
+}
+
+function addCell(value) {
+    const cell = document.createElement("td");
+    const cellText = document.createTextNode(value);
+    cell.appendChild(cellText);
+    return cell
+}
+
+function addTableRows(res){
+    const transactions =  res
+    const tbl = document.getElementById('transaction_data');
+    const tblBody = document.createElement("tbody");
+
+    transactions.slice(-10).reverse().forEach((transaction) => {
+        const row = document.createElement("tr");
+
+        row.appendChild(addCell(transaction.transaction_type))
+        row.appendChild(addCell(transaction.from_user))
+        row.appendChild(addCell(transaction.to_user))
+        row.appendChild(addCell(transaction.amount))
+
+        tblBody.appendChild(row);
+    })
+
+    tbl.appendChild(tblBody);
+    document.body.appendChild(tbl);
+}
+loadTransactions().then((res) => {
+    addTableRows(res)
+})
 
 async function helper(type, amount, {to_user_id = null, from_user_id = null}) {
     const data = {
@@ -13,11 +48,12 @@ async function helper(type, amount, {to_user_id = null, from_user_id = null}) {
             "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
-    }).then(res => {
-        return res.json();
-    }).then(data => {
-        console.log(data);
-    });
+    }).then(ress => {
+        loadTransactions().then((res) => {
+            addTableRows(res)
+        })
+        return ress.json();
+    })
 }
 
 function value(id) {
@@ -27,7 +63,9 @@ function value(id) {
 document.getElementById("deposit_form").addEventListener("submit", function (e) {
     e.preventDefault();
     helper('deposit', value('deposit_amount'), {to_user_id: value('deposit_userId')})
-        .then();
+        .then((res) => {
+
+        });
 });
 
 document.getElementById("withdraw_form").addEventListener("submit", function (e) {

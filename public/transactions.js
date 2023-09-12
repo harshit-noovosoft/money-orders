@@ -14,6 +14,10 @@ function addCell(value) {
 loadTransactions().then((res) => {
     const transactions =  res
     const tbl = document.getElementById('transaction_data');
+    const previousRows = tbl.querySelector("tbody")
+    if(previousRows) {
+        previousRows.remove()
+    }
     const tblBody = document.createElement("tbody");
 
     transactions.slice(-10).reverse().forEach((transaction) => {
@@ -28,5 +32,4 @@ loadTransactions().then((res) => {
     })
 
     tbl.appendChild(tblBody);
-    document.body.appendChild(tbl);
 })

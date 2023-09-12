@@ -12,7 +12,6 @@ function addOptions(res, select) {
     })
 }
 loadUsers().then((res) => {
-    console.log(res)
     const deposit = document.getElementById('deposit_users')
     const withdraw = document.getElementById('withdraw_users')
     const transferTo = document.getElementById('transfer_deposit_users')

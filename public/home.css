@@ -10,7 +10,7 @@ body {
 }
 .heading{
     text-align: center;
-    color: #78C1F3;
+    color: var(--heading-color);
 }
 
 .container{

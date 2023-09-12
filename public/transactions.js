@@ -80,6 +80,10 @@ document.getElementById("withdraw_form").addEventListener("submit", function (e)
 
 document.getElementById("transfer_form").addEventListener("submit", function (e) {
     e.preventDefault();
+    if(value('transfer_deposit_userId') === value('transfer_withdraw_userId')){
+        alert("Transfer not Possible");
+        return;
+    }
     helper('transfer', value('transfer_amount'), {
         to_user_id: value('transfer_deposit_userId'),
         from_user_id: value('transfer_withdraw_userId')

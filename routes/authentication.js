@@ -43,7 +43,7 @@ router.post('/register' , async (req,res)=>{
                         values ($1,$2,$3)`,
            [username,email,hash_password]
        );
-       res.send("Data successfully entered in Database");
+       res.redirect('/login.html');
    }catch (err){
        res.status(err.status || 400).send(err.message);
    }

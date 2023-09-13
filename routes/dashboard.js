@@ -12,7 +12,6 @@ router.use((req,res,next)=>{
     }
     next();
 });
-
 router.get('/',(req,res)=>{
     res.sendFile(path.join(__dirname , './public/dashboard.html'));
 });

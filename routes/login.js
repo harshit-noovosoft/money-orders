@@ -6,11 +6,10 @@ import path from 'path';
 const __dirname = path.resolve();
 
 const router = express.Router();
-router.use(express.urlencoded({extended: true}));
+router.use(express.json());
 router.use(express.static('public'));
 
 router.get('/',(req,res)=>{
-    console.log('login')
     res.sendFile(path.join(__dirname , './public/login.html'));
 });
 
@@ -28,8 +27,9 @@ router.post('/', async (req,res)=>{
             return res.status(400).send("Invalid Password");
         }
         const token = jwt.sign({"username" : username , "role": role}, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
-        res.cookie('access_token' , token , {httpOnly:true});
-        res.redirect('/dashboard');
+        res.cookie('access_token' , token , {httpOnly:true})
+        res.send({status: 200})
+        //res.redirect( '/dashboard');
     }catch (err) {
         res.status(err.status || 400).send(err.message);
     }

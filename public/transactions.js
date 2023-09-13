@@ -58,7 +58,7 @@ async function helper(type, amount, {to_user_id = null, from_user_id = null}) {
         body: JSON.stringify(data)
     }).then(ress => {
         loadTransactions().then((res) => {
-            addTableRows(res.data);
+            addTableRows(res.data,res.role);
         })
         return ress.json();
     })

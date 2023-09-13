@@ -17,6 +17,7 @@ import transaction from "./routes/transaction.js";
 import users from "./routes/users.js";
 import dashboard from "./routes/dashboard.js";
 import logout from "./routes/logout.js";
+import checkAuth from "./middleware/checkAuth.js";
 
 
 app.use('/dashboard' , dashboard);
@@ -26,15 +27,7 @@ app.use("/transaction" , transaction);
 app.use("/users" , users);
 app.use("/logout" , logout);
 
-app.use((req,res,next)=>{
-    const token = req.cookies['access_token'];
-    if(!token) {
-        return res.redirect('/login');
-    }
-    next();
-});
-
-app.get('/',(req,res)=>{
+app.get('/', checkAuth ,(req,res)=>{
     return res.redirect('/dashboard');
 });
 

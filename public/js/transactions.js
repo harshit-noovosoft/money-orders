@@ -22,7 +22,7 @@ function addTableRows(res){
     }
     const tblBody = document.createElement("tbody");
 
-    transactions.slice(-10).reverse().forEach((transaction) => {
+    transactions.reverse().forEach((transaction) => {
         const row = document.createElement("tr");
 
         row.appendChild(addCell(transaction.transaction_type.toUpperCase()));
@@ -67,9 +67,7 @@ function value(id) {
 document.getElementById("deposit_form").addEventListener("submit", function (e) {
     e.preventDefault();
     helper('deposit', value('deposit_amount'), {to_user_id: value('deposit_userId')})
-        .then((res) => {
-
-        });
+        .then();
 });
 
 document.getElementById("withdraw_form").addEventListener("submit", function (e) {

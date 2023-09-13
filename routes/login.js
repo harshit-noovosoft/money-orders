@@ -29,7 +29,7 @@ router.post('/', async (req,res)=>{
         const token = jwt.sign({"username" : username , "role": role}, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
         res.cookie('access_token' , token , {httpOnly:true})
         res.send({status: 200})
-        //res.redirect( '/dashboard');
+        //return res.redirect( '/dashboard/');
     }catch (err) {
         res.status(err.status || 400).send(err.message);
     }

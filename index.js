@@ -16,12 +16,14 @@ import register from "./routes/register.js";
 import transaction from "./routes/transaction.js";
 import users from "./routes/users.js";
 import dashboard from "./routes/dashboard.js";
+import logout from "./routes/logout.js";
 
 app.use('/dashboard' , dashboard);
 app.use("/login" , login);
 app.use("/register" , register);
 app.use("/transaction" , transaction);
 app.use("/users" , users);
+app.use("/logout" , logout);
 
 app.use((req,res,next)=>{
     const token = req.cookies['access_token'];

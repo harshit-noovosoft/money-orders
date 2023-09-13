@@ -16,8 +16,10 @@ import users from "./routes/users.js";
 import dashboard from "./routes/dashboard.js";
 import logout from "./routes/logout.js";
 import verifyToken from "./middleware/verifyToken.js";
+import sendMail from "./routes/sendMail.js";
 
 app.use('/dashboard' , dashboard);
+app.use('/sendMail' , sendMail);
 app.use("/login" , login);
 app.use("/register" , register);
 app.use("/transaction" , transaction);

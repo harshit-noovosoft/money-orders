@@ -37,6 +37,9 @@ function addTableRows(res,role){
     if(role !== 'admin') {
         const element = document.getElementById('transactions');
         element.remove();
+    }else if(role === 'customer') {
+        const mailBtn = document.getElementById('get-mail');
+        mailBtn.remove()
     }
 }
 loadTransactions().then((res) => {

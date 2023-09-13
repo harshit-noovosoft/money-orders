@@ -43,7 +43,7 @@ loadTransactions().then((res) => {
     addTableRows(res.data , res.role);
 })
 
-async function helper(type, amount, {to_user_id = null, from_user_id = null}) {
+async function admitTransaction(type, amount, {to_user_id = null, from_user_id = null}) {
     const data = {
         "type": type,
         "amount": amount,
@@ -70,13 +70,13 @@ function value(id) {
 
 document.getElementById("deposit_form").addEventListener("submit", function (e) {
     e.preventDefault();
-    helper('deposit', value('deposit_amount'), {to_user_id: value('deposit_userId')})
+    admitTransaction('deposit', value('deposit_amount'), {to_user_id: value('deposit_userId')})
         .then();
 });
 
 document.getElementById("withdraw_form").addEventListener("submit", function (e) {
     e.preventDefault();
-    helper('withdraw', value('withdraw_amount'), {from_user_id: value('withdraw_userId')})
+    admitTransaction('withdraw', value('withdraw_amount'), {from_user_id: value('withdraw_userId')})
         .then();
 });
 
@@ -86,7 +86,7 @@ document.getElementById("transfer_form").addEventListener("submit", function (e)
         alert("Transfer not Possible");
         return;
     }
-    helper('transfer', value('transfer_amount'), {
+    admitTransaction('transfer', value('transfer_amount'), {
         to_user_id: value('transfer_deposit_userId'),
         from_user_id: value('transfer_withdraw_userId')
     })

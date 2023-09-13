@@ -3,13 +3,14 @@ import bcrypt from "bcrypt";
 import pool from "../database_connection.js";
 import jwt from "jsonwebtoken";
 import path from 'path';
+import verifyLogin from "../middleware/verifyLogin.js";
 const __dirname = path.resolve();
 
 const router = express.Router();
 router.use(express.json());
 router.use(express.static('public'));
 
-router.get('/',(req,res)=>{
+router.get('/', verifyLogin, (req,res)=>{
     res.sendFile(path.join(__dirname , './public/login.html'));
 });
 

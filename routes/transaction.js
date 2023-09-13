@@ -2,29 +2,12 @@ import express from "express";
 import pool from "../database_connection.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
+import checkAuth from "../middleware/checkAuth.js";
 dotenv.config();
 
 const router = express.Router();
 
-router.use((req,res,next)=>{
-    const token = req.cookies['access_token'];
-
-    if(!token) {
-        return res.status(400).send("Token not found");
-    }
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, payload) => {
-        if (err) {
-            return res.status(401).send(err.message);
-        }
-        req.user = {
-            username: payload.username,
-            role: payload.role
-        }
-        next();
-    });
-});
-
-router.get('/' , async (req,res)=>{
+router.get('/' , checkAuth ,async (req,res)=>{
     try{
         const {username , role} = req.user;
         let transactions;

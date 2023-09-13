@@ -1,12 +1,12 @@
 import express from 'express';
 import path from 'path';
-import checkAuth from "../middleware/checkAuth.js";
+import verifyToken from "../middleware/verifyToken.js";
 const __dirname = path.resolve();
 
 const router = express.Router();
 router.use(express.static('public'));
 
-router.get('/',checkAuth,(req,res)=>{
+router.get('/',verifyToken,(req,res)=>{
     res.sendFile(path.join(__dirname , './views/dashboard.html'));
 });
 

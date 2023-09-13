@@ -6,7 +6,7 @@ loginForm.addEventListener('submit', async function (e) {
         'username': document.getElementById('username').value,
         'password': document.getElementById('password').value
     }
-    await fetch(BASE_URL + 'login/', {
+    await fetch(BASE_URL + 'login', {
         method: 'POST',
         headers: {
             'Content-Type': "application/json"

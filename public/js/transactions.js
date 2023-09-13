@@ -22,7 +22,7 @@ function addTableRows(res,role){
     }
     const tblBody = document.createElement("tbody");
 
-    transactions.slice(-10).reverse().forEach((transaction) => {
+    transactions.reverse().forEach((transaction) => {
         const row = document.createElement("tr");
 
         row.appendChild(addCell(transaction.transaction_type.toUpperCase()));
@@ -43,7 +43,7 @@ loadTransactions().then((res) => {
     addTableRows(res.data , res.role);
 })
 
-async function admitTransaction(type, amount, {to_user_id = null, from_user_id = null}) {
+async function helper(type, amount, {to_user_id = null, from_user_id = null}) {
     const data = {
         "type": type,
         "amount": amount,
@@ -70,15 +70,13 @@ function value(id) {
 
 document.getElementById("deposit_form").addEventListener("submit", function (e) {
     e.preventDefault();
-    admitTransaction('deposit', value('deposit_amount'), {to_user_id: value('deposit_userId')})
-        .then((res) => {
-
-        });
+    helper('deposit', value('deposit_amount'), {to_user_id: value('deposit_userId')})
+        .then();
 });
 
 document.getElementById("withdraw_form").addEventListener("submit", function (e) {
     e.preventDefault();
-    admitTransaction('withdraw', value('withdraw_amount'), {from_user_id: value('withdraw_userId')})
+    helper('withdraw', value('withdraw_amount'), {from_user_id: value('withdraw_userId')})
         .then();
 });
 
@@ -88,7 +86,7 @@ document.getElementById("transfer_form").addEventListener("submit", function (e)
         alert("Transfer not Possible");
         return;
     }
-    admitTransaction('transfer', value('transfer_amount'), {
+    helper('transfer', value('transfer_amount'), {
         to_user_id: value('transfer_deposit_userId'),
         from_user_id: value('transfer_withdraw_userId')
     })

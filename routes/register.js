@@ -24,8 +24,7 @@ router.post('/' , async (req,res)=>{
                         values ($1,$2,$3)`,
             [username,email,hash_password]
         );
-        res.send({status: 200})
-        //res.redirect('/login');
+        res.send({status: 200});
     }catch (err){
         res.status(err.status || 400).send(err.message);
     }

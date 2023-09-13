@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.post('/' , (req,res) => {
     res.clearCookie('access_token');
-    res.redirect('/login');
+    res.send({status: 200});
 });
 
 export default router;

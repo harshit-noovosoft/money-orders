@@ -8,7 +8,7 @@ registerForm.addEventListener('submit', async function (e) {
         'password': document.getElementById('password').value,
         'email': document.getElementById('email').value,
     }
-    await fetch(BASE_URL + 'register/', {
+    await fetch(BASE_URL + 'register', {
         method: 'POST',
         headers: {
             'Content-Type': "application/json"

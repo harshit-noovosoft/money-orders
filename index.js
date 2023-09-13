@@ -1,8 +1,6 @@
 import express from 'express';
 import dotenv from "dotenv";
 import cookieParser from 'cookie-parser';
-import path from 'path';
-const __dirname = path.resolve();
 dotenv.config();
 
 const app = express();
@@ -18,7 +16,6 @@ import users from "./routes/users.js";
 import dashboard from "./routes/dashboard.js";
 import logout from "./routes/logout.js";
 import checkAuth from "./middleware/checkAuth.js";
-
 
 app.use('/dashboard' , dashboard);
 app.use("/login" , login);

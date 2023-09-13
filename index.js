@@ -15,7 +15,7 @@ import transaction from "./routes/transaction.js";
 import users from "./routes/users.js";
 import dashboard from "./routes/dashboard.js";
 import logout from "./routes/logout.js";
-import checkAuth from "./middleware/checkAuth.js";
+import verifyToken from "./middleware/verifyToken.js";
 import sendMail from "./routes/sendMail.js";
 
 app.use('/sendMail' , sendMail);

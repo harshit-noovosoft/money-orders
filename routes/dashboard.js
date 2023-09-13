@@ -7,7 +7,7 @@ const router = express.Router();
 router.use(express.static('public'));
 
 router.get('/',checkAuth,(req,res)=>{
-    res.sendFile(path.join(__dirname , './public/dashboard.html'));
+    res.sendFile(path.join(__dirname , './views/dashboard.html'));
 });
 
 export default router;

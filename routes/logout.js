@@ -2,9 +2,9 @@ import express from "express";
 
 const router = express.Router();
 
-router.post('/' , (req,res) => {
+router.get('/' , (req,res) => {
     res.clearCookie('access_token');
-    res.send({status: 200});
+    res.redirect('/login');
 });
 
 export default router;

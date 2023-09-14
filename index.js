@@ -21,8 +21,8 @@ import sendMail from "./routes/sendMail.js";
 
 app.use("/login" , login);
 app.use("/register" , register);
-app.use(authentication);
-app.use(authorization);
+
+app.use(authentication,authorization);
 app.use('/sendMail' , sendMail);
 app.use('/dashboard' , dashboard);
 app.use('/sendMail' , sendMail);

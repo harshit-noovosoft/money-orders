@@ -7,10 +7,11 @@ dotenv.config();
 
 const router = express.Router();
 
-router.use(authentication , (req,res,next)=>{
+const operationalMiddleware = ((req,res,next)=>{
     if(req.user.role !== 'admin') {
         res.status(403).send("Unauthorized User");
     }
+    next();
 });
 
 router.get('/'  ,async (req,res)=>{
@@ -18,30 +19,30 @@ router.get('/'  ,async (req,res)=>{
         const {username , role} = req.user;
         let transactions;
         if(role !== 'admin') {
-            const userId = await pool.query(`SELECT user_id from users 
-                                                WHERE username = $1` , [username]);
+            const userId = await pool.query(`SELECT user_id from users
+                                             WHERE username = $1` , [username]);
             const queryString = `SELECT transactions.transaction_id,
-                                                      transactions.transaction_type,
-                                                      (SELECT username from users 
-                                                                       where user_id = transactions.from_user_id) 
-                                                          as from_user,
-                                                      (SELECT username from users 
-                                                                       where user_id = transactions.to_user_id)   
-                                                          as to_user, transactions.amount
-                                               from transactions
-                                                WHERE from_user_id = $1 or to_user_id = $1`
+                                        transactions.transaction_type,
+                                        (SELECT username from users
+                                         where user_id = transactions.from_user_id)
+                                            as from_user,
+                                        (SELECT username from users
+                                         where user_id = transactions.to_user_id)
+                                            as to_user, transactions.amount
+                                 from transactions
+                                 WHERE from_user_id = $1 or to_user_id = $1`
             transactions = await pool.query(queryString , [userId.rows[0].user_id]);
         }
         else {
             const queryString = `SELECT transactions.transaction_id,
-                                                      transactions.transaction_type,
-                                                      (SELECT username from users 
-                                                                       where user_id = transactions.from_user_id) 
-                                                          as from_user,
-                                                      (SELECT username from users 
-                                                                       where user_id = transactions.to_user_id)   
-                                                          as to_user, transactions.amount
-                                               from transactions`
+                                        transactions.transaction_type,
+                                        (SELECT username from users
+                                         where user_id = transactions.from_user_id)
+                                            as from_user,
+                                        (SELECT username from users
+                                         where user_id = transactions.to_user_id)
+                                            as to_user, transactions.amount
+                                 from transactions`
             transactions = await pool.query(queryString);
         }
         res.send({"data" : transactions.rows , "role": role});
@@ -50,12 +51,12 @@ router.get('/'  ,async (req,res)=>{
     }
 });
 
-router.post('/' , async (req,res)=>{
+router.post('/' , operationalMiddleware ,async (req,res)=>{
     const { from_user_id , amount , type , to_user_id} = req.body;
     try{
         await pool.query(`Insert into transactions (
-                   transaction_type, from_user_id, to_user_id,amount) 
-                        values ($1,$2,$3,$4)`,
+                    transaction_type, from_user_id, to_user_id,amount)
+                          values ($1,$2,$3,$4)`,
             [type,from_user_id,to_user_id,amount]
         );
         res.send({message: "Transaction Successfull"});

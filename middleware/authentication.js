@@ -13,7 +13,7 @@ const authentication = (req, res, next) => {
             username: payload.username,
             role: payload.role
         }
-        next();
     });
+    next();
 }
 export default authentication;

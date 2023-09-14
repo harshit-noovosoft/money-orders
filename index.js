@@ -15,19 +15,22 @@ import transaction from "./routes/transaction.js";
 import users from "./routes/users.js";
 import dashboard from "./routes/dashboard.js";
 import logout from "./routes/logout.js";
-import verifyToken from "./middleware/verifyToken.js";
+import authentication from "./middleware/authentication.js";
+import authorization from "./middleware/authorization.js";
 import sendMail from "./routes/sendMail.js";
 
+app.use("/login" , login);
+app.use("/register" , register);
+app.use(authentication);
+app.use(authorization);
 app.use('/sendMail' , sendMail);
 app.use('/dashboard' , dashboard);
 app.use('/sendMail' , sendMail);
-app.use("/login" , login);
-app.use("/register" , register);
 app.use("/transaction" , transaction);
 app.use("/users" , users);
 app.use("/logout" , logout);
 
-app.get('/' ,(req,res)=>{
+app.get('/',(req, res)=>{
     return res.redirect('/dashboard');
 });
 

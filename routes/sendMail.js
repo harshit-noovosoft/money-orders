@@ -1,7 +1,7 @@
 import express from "express";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-import verifyToken from "../middleware/verifyToken.js";
+import authentication from "../middleware/authentication.js";
 import pool from "../database_connection.js";
 dotenv.config();
 const router = express.Router();
@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
     port: process.env.SMTP_PORT
 });
 
-router.get('/'  , verifyToken, async (req,res) => {
+router.get('/'  , authentication, async (req, res) => {
     const username = "new";
     const result = await pool.query(`
         SELECT user_id , email from users

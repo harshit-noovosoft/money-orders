@@ -2,12 +2,18 @@ import express from "express";
 import pool from "../database_connection.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import verifyToken from "../middleware/verifyToken.js";
+import authentication from "../middleware/authorization.js";
 dotenv.config();
 
 const router = express.Router();
 
-router.get('/' , verifyToken ,async (req,res)=>{
+router.use(authentication , (req,res,next)=>{
+    if(req.user.role !== 'admin') {
+        res.status(403).send("Unauthorized User");
+    }
+});
+
+router.get('/'  ,async (req,res)=>{
     try{
         const {username , role} = req.user;
         let transactions;

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const verifyToken = (req,res,next) => {
+const authentication = (req, res, next) => {
     const token = req.cookies['access_token'];
     if(!token) {
         return res.redirect('/login');
@@ -16,4 +16,4 @@ const verifyToken = (req,res,next) => {
         next();
     });
 }
-export default verifyToken;
+export default authentication;

@@ -1,7 +1,7 @@
 import express from "express";
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
-import checkAuth from "../middleware/verifyToken.js";
+import verifyToken from "../middleware/verifyToken.js";
 import pool from "../database_connection.js";
 dotenv.config();
 const router = express.Router();
@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
     port: process.env.SMTP_PORT
 });
 
-router.post('/'  , async (req,res) => {
+router.get('/'  , verifyToken, async (req,res) => {
     const username = "new";
     const result = await pool.query(`
         SELECT user_id , email from users
@@ -23,9 +23,8 @@ router.post('/'  , async (req,res) => {
 
     const userId = result.rows[0].user_id;
     const to_email = result.rows[0].email;
-    const rows_limit = req.body.limit
+    const rows_limit = req.query.limit
 
-    console.log(to_email + " " + userId);
     const queryString = `SELECT transactions.transaction_id,
                                                       transactions.transaction_type,
                                                       (SELECT username from users
@@ -62,7 +61,7 @@ router.post('/'  , async (req,res) => {
     if(obj) {
         return res.send({status: 200});
     }else {
-        return res.send({status: 200});
+        return res.send({status: 404});
     }
 });
 

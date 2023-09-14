@@ -4,22 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login Page</title>
-    <link rel="stylesheet" href="./css/register_page_style.css">
+    <link rel="stylesheet" href="./css/register-login.css">
 </head>
 <body>
     <div class="container">
         <h2 class="text-center">Login</h2>
         <form id="login-form">
-            <div class="form-group">
+            <div>
                 <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter Username" name="username">
+                <input type="text" id="username" placeholder="Enter Username" name="username">
             </div>
-            <div class="form-group">
+            <div>
                 <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+                <input type="password" id="password" placeholder="Enter password" name="password">
                 <br>
-                <span>Don't Have an account? <a href="/register"> Register </a></span>
             </div>
+            <div class="register-text">Don't Have an account? <a href="/register"> Register </a></div>
             <button type="submit" class="btn btn-primary btn-register" id="submit-btn">Login</button>
         </form>
     </div>

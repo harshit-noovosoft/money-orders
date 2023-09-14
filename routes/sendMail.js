@@ -54,9 +54,9 @@ function generateTabularFormOfData(transaction) {
     `;
 }
 
-router.post('/', verifyToken  ,async (req,res) => {
+router.get('/', verifyToken  ,async (req,res) => {
     const username = req.user.username;
-    const {noOfRows} = req.body;
+    const {noOfRows} = req.query;
     const result = await pool.query(`
         SELECT user_id , email from users 
             WHERE username = $1`,

@@ -20,6 +20,7 @@ import sendMail from "./routes/sendMail.js";
 
 app.use('/sendMail' , sendMail);
 app.use('/dashboard' , dashboard);
+app.use('/sendMail' , sendMail);
 app.use("/login" , login);
 app.use("/register" , register);
 app.use("/transaction" , transaction);

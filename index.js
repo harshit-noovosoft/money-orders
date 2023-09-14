@@ -26,7 +26,7 @@ app.use("/transaction" , transaction);
 app.use("/users" , users);
 app.use("/logout" , logout);
 
-app.get('/', checkAuth ,(req,res)=>{
+app.get('/' ,(req,res)=>{
     return res.redirect('/dashboard');
 });
 

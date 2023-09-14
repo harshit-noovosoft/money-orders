@@ -1,9 +1,19 @@
+import jwt from "jsonwebtoken";
+
 const verifyToken = (req,res,next) => {
     const token = req.cookies['access_token'];
     if(!token) {
         return res.redirect('/login');
     }
-    next();
+    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, payload) => {
+        if (err) {
+            return res.redirect('/login');
+        }
+        req.user = {
+            username: payload.username,
+            role: payload.role
+        }
+        next();
+    });
 }
-
 export default verifyToken;

@@ -2,12 +2,12 @@ import express from "express";
 import pool from "../database_connection.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import checkAuth from "../middleware/checkAuth.js";
+import verifyToken from "../middleware/verifyToken.js";
 dotenv.config();
 
 const router = express.Router();
 
-router.get('/' , checkAuth ,async (req,res)=>{
+router.get('/' , verifyToken ,async (req,res)=>{
     try{
         const {username , role} = req.user;
         let transactions;

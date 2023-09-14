@@ -4,30 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registration Page</title>
-    <link rel="stylesheet" type="text/css" href="./css/register_page_style.css">
+    <link rel="stylesheet" type="text/css" href="./css/register-login.css">
 </head>
 <body>
     <div class="container">
         <h2 class="text-center">Register</h2>
         <form id="register-form">
-            <div class="form-group">
+            <div>
                 <label for="username">Username</label>
-                <input type="text" class="form-control" id="username" placeholder="Enter username" name="username">
+                <input type="text" id="username" placeholder="Enter username" name="username">
             </div>
-            <div class="form-group">
+            <div>
                 <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+                <input type="email" id="email" placeholder="Enter email" name="email">
             </div>
-            <div class="form-group">
+            <div>
                 <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Enter password" name="password">
+                <input type="password" id="password" placeholder="Enter password" name="password">
             </div>
-            <div class="form-group">
+            <div>
                 <label for="confirm-password">Confirm Password</label>
-                <input type="password" class="form-control" id="confirm-password" placeholder="Confirm password" name="confirm_password">
+                <input type="password" id="confirm-password" placeholder="Confirm password" name="confirm_password">
                 <br>
-                <span>Already Have an account? <a href="/login"> Login </a></span>
             </div>
+            <div class="login-text">Already Have an account? <a href="/login"> Login </a></div>
             <button type="submit" class="btn btn-primary btn-register">Register</button>
         </form>
     </div>

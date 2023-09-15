@@ -23,7 +23,7 @@
     </div>
     <div class="container">
         <div class="flex">
-            <div class="transaction_data">
+            <div class="data-tables">
                 <h2 class="heading">Transaction History</h2>
                 <div>
                     <table class="transaction_table" id="transaction_data">
@@ -33,8 +33,27 @@
                                 <th>From</th>
                                 <th>To</th>
                                 <th>Amount</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="email-data" class="data-tables">
+                <h2 class="heading">Email History</h2>
+                <div>
+                    <table class="transaction_table" id="email-table">
+                        <thead>
+                        <tr>
+                            <th>From</th>
+                            <th>Your Email</th>
+                            <th>Transactions</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>

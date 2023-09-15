@@ -9,11 +9,31 @@ function addCell(value) {
     const cell = document.createElement("td");
     const cellText = document.createTextNode(value);
     cell.appendChild(cellText);
-    return cell
+    return cell;
+}
+
+function createRow(rowData) {
+    const row = document.createElement("tr");
+    rowData.forEach((cell) => {
+        row.appendChild(addCell(cell));
+    });
+    return row;
+}
+
+function manageUI(role) {
+    if(role !== 'admin') {
+        const element = document.getElementById('transactions');
+        element.remove();
+    }else {
+        const mailTable = document.getElementById('email-data');
+        mailTable.remove();
+        const mailBtn = document.getElementById('mail-btn');
+        mailBtn.remove()
+    }
 }
 
 
-function addTableRows(res,role){
+function addTableRows(res){
     const transactions =  res
     const tbl = document.getElementById('transaction_data');
     const previousRows = tbl.querySelector("tbody")
@@ -21,29 +41,23 @@ function addTableRows(res,role){
         previousRows.remove()
     }
     const tblBody = document.createElement("tbody");
-
     transactions.reverse().forEach((transaction) => {
-        const row = document.createElement("tr");
-
-        row.appendChild(addCell(transaction.transaction_type.toUpperCase()));
-        row.appendChild(addCell(transaction.from_user || "-"));
-        row.appendChild(addCell(transaction.to_user || "-"));
-        row.appendChild(addCell(transaction.amount));
-
-        tblBody.appendChild(row);
+        const rowData = [
+            transaction.transaction_type.toUpperCase(),
+            transaction.from_user || "-",
+            transaction.to_user || "-",
+            transaction.amount,
+            transaction.transaction_status
+        ]
+        tblBody.appendChild(createRow(rowData));
     })
     tbl.appendChild(tblBody);
 
-    if(role !== 'admin') {
-        const element = document.getElementById('transactions');
-        element.remove();
-    }else {
-        const mailBtn = document.getElementById('mail-btn');
-        mailBtn.remove()
-    }
+
 }
 loadTransactions().then((res) => {
-    addTableRows(res.data , res.role);
+    addTableRows(res.data);
+    manageUI(res.role);
 })
 
 async function admitTransaction(type, amount, {to_user_id = null, from_user_id = null}) {
@@ -61,7 +75,7 @@ async function admitTransaction(type, amount, {to_user_id = null, from_user_id =
         body: JSON.stringify(data)
     }).then(ress => {
         loadTransactions().then((res) => {
-            addTableRows(res.data,res.role);
+            addTableRows(res.data);
         })
         return ress.json();
     })
@@ -95,3 +109,10 @@ document.getElementById("transfer_form").addEventListener("submit", function (e)
     })
         .then();
 });
+
+setInterval(() => {
+    loadTransactions().then((res) => {
+        addTableRows(res.data , res.role);
+    })
+} , 15000);
+

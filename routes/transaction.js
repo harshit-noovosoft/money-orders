@@ -2,13 +2,14 @@ import express from "express";
 import pool from "../database_connection.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import authentication from "../middleware/authorization.js";
+import {getRole} from "./getRole.js";
 dotenv.config();
 
 const router = express.Router();
 
-const operationalMiddleware = ((req,res,next)=>{
-    if(req.user.role !== 'admin') {
+const operationalMiddleware = (async (req,res,next)=>{
+    const role = await getRole(req.user.username);
+    if(role !== 'admin') {
         res.status(403).send("Unauthorized User");
     }
     next();
@@ -16,7 +17,8 @@ const operationalMiddleware = ((req,res,next)=>{
 
 router.get('/'  ,async (req,res)=>{
     try{
-        const {username , role} = req.user;
+        const username = req.user.username;
+        const role = await getRole(username);
         let whereClause = '';
         let userId;
         if(role === 'customer') {
@@ -35,7 +37,7 @@ router.get('/'  ,async (req,res)=>{
                                                from transactions` + ` ${whereClause}` +
                                                 ` ORDER BY status DESC, transaction_id `;
         const transactions = await pool.query(queryString);
-        res.send({"data" : transactions.rows , "role": role});
+        res.send({"data" : transactions.rows});
     }catch (err){
         res.status(err.status || 400).send(err.message);
     }

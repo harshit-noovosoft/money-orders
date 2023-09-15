@@ -20,11 +20,13 @@ import authorization from "./middleware/authorization.js";
 import sendMail from "./routes/sendMail.js";
 import {emailService} from "./services/email.js";
 import {transactionService} from "./services/transaction.js";
+import getRoleRoute from "./routes/getRole.js";
 
 app.use("/login" , login);
 app.use("/register" , register);
 
 app.use(authentication,authorization);
+app.use('/getRole' , getRoleRoute);
 app.use('/sendMail' , sendMail);
 app.use('/dashboard' , dashboard);
 app.use('/sendMail' , sendMail);
@@ -32,10 +34,10 @@ app.use("/transaction" , transaction);
 app.use("/users" , users);
 app.use("/logout" , logout);
 
-setInterval((e) => {
-    transactionService(5)
-    emailService(2)
-}, 2000)
+// setInterval((e) => {
+//     transactionService(5)
+//     emailService(2)
+// }, 2000)
 
 app.get('/',(req, res)=>{
     return res.redirect('/dashboard');

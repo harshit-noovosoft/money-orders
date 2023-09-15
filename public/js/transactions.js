@@ -5,6 +5,16 @@ async function loadTransactions() {
     return await response.json();
 }
 
+async function fetchRole() {
+    const roleResponse = await fetch(BASE_URL + "getRole");
+    const role = await roleResponse.json();
+    return role.role;
+}
+
+fetchRole().then(role => {
+    manageUI(role);
+})
+
 function addCell(value, color=null) {
     const cell = document.createElement("td");
     const cellText = document.createTextNode(value);
@@ -64,8 +74,9 @@ function addTableRows(res){
 }
 loadTransactions().then((res) => {
     addTableRows(res.data);
-    manageUI(res.role);
 })
+
+
 
 async function admitTransaction(type, amount, {to_user_id = null, from_user_id = null}) {
     const data = {
@@ -119,7 +130,7 @@ document.getElementById("transfer_form").addEventListener("submit", function (e)
 
 setInterval(() => {
     loadTransactions().then((res) => {
-        addTableRows(res.data , res.role);
+        addTableRows(res.data);
     })
 } , 5000);
 

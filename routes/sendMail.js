@@ -3,17 +3,22 @@ import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import authentication from "../middleware/authentication.js";
 import pool from "../database_connection.js";
+import {getRole} from "./getRole.js";
 dotenv.config();
 const router = express.Router();
 
 router.use(express.json());
 
-const transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOG_HOST,
-    port: process.env.SMTP_PORT
-});
+const checkUserType = async (req,res,next) => {
+    const role = await getRole(req.user.username);
+    if(role === 'admin') {
+        res.status(400).send("Admin can't access this route right now");
+    }
+    next();
+}
 
-router.get('/' , authentication ,async (req , res) => {
+
+router.get('/' , authentication , checkUserType ,async (req , res) => {
     try {
         const username = req.user.username;
         const result = await pool.query(`
@@ -32,13 +37,13 @@ router.get('/' , authentication ,async (req , res) => {
             WHERE receiver_user_id = $1` ,
             [userId]
         )
-        res.send({"rows" : emails.rows , "role": req.user.role});
+        res.send({"rows" : emails.rows});
     }catch (err){
-        res.send(500).send(err.message);
+        res.sendStatus(500).send(err.message);
     }
 });
 
-router.post('/' , authentication ,async (req,res,) => {
+router.post('/' , authentication, checkUserType ,async (req,res,) => {
     try{
         const username = req.user.username;
         const limit = req.body.limit;

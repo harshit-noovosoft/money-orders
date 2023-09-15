@@ -10,8 +10,7 @@ const authentication = (req, res, next) => {
             return res.redirect('/login');
         }
         req.user = {
-            username: payload.username,
-            role: payload.role
+            username: payload.username
         }
     });
     next();

@@ -32,7 +32,8 @@ router.get('/'  ,async (req,res)=>{
                                                       (SELECT username from users 
                                                                        where user_id = transactions.to_user_id)   
                                                           as to_user, transactions.amount , transactions.status as transaction_status
-                                               from transactions` + ` ${whereClause}`;
+                                               from transactions` + ` ${whereClause}` +
+                                                ` ORDER BY status DESC, transaction_id `;
         const transactions = await pool.query(queryString);
         res.send({"data" : transactions.rows , "role": role});
     }catch (err){

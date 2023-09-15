@@ -42,7 +42,6 @@ router.post('/' , authentication ,async (req,res,) => {
     try{
         const username = req.user.username;
         const limit = req.body.limit;
-        console.log(limit);
         const result = await pool.query(`
             SELECT user_id , email from users
                 WHERE username = $1`,

@@ -30,7 +30,7 @@ body {
 }
 .heading{
     text-align: center;
-    color: var(--heading-color);
+    color: black;
 }
 
 .container{

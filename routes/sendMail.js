@@ -29,7 +29,9 @@ router.get('/' , authentication ,async (req , res) => {
                 emails.no_of_entries as transaction_limit,
                 emails.status as email_status
             from emails
-            WHERE receiver_user_id = $1` ,
+            WHERE receiver_user_id = $1
+            ORDER BY status DESC, email_id;
+            ` ,
             [userId]
         )
         res.send({"rows" : emails.rows , "role": req.user.role});

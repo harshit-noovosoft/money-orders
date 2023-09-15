@@ -1,5 +1,5 @@
 body {
-    background-color: #78C1F3;
+    background-color: #f1f1f1;
     font-family: 'Poppins', sans-serif;
 }
 
@@ -30,8 +30,8 @@ button {
     padding: 20px;
     border: 1px solid #dcdcdc;
     border-radius: 20px;
-    background-color: #164B60;
-    color: white;
+    background-color: #78C1F3;
+    color: black;
 }
 
 .form-group {
@@ -39,13 +39,13 @@ button {
 }
 
 .btn-register {
-    background-color: #0056b3;
+    background-color: #0a233a;
     color: #fff;
 }
 
 .btn-register:hover {
     background-color: #fff;
-    color: #0056b3;
+    color: #0a233a;
 }
 
 .register-text, .login-text {
@@ -54,9 +54,9 @@ button {
 }
 
 a{
-    color: wheat;
+    color: #4529de;
 }
 
 a:hover{
-    color: white;
+    color: #828288;
 }

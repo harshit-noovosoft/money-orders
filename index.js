@@ -35,7 +35,7 @@ app.use("/logout" , logout);
 setInterval((e) => {
     transactionService(5)
     emailService(2)
-}, 2000)
+}, 5000)
 
 app.get('/',(req, res)=>{
     return res.redirect('/dashboard');

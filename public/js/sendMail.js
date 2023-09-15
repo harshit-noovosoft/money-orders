@@ -41,7 +41,7 @@ function createEmailTable(rows) {
             email.transaction_limit,
             email.email_status
         ]
-        tblBody.appendChild(createRow(rowData));
+        tblBody.appendChild(createRow(rowData,3));
     })
     tbl.appendChild(tblBody);
 }

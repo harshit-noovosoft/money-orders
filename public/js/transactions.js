@@ -5,17 +5,24 @@ async function loadTransactions() {
     return await response.json();
 }
 
-function addCell(value) {
+function addCell(value, color=null) {
     const cell = document.createElement("td");
     const cellText = document.createTextNode(value);
+    if(color) {
+        cell.classList.add(value);
+    }
     cell.appendChild(cellText);
     return cell;
 }
 
-function createRow(rowData) {
+function createRow(rowData,coloredColumnIndex) {
     const row = document.createElement("tr");
-    rowData.forEach((cell) => {
-        row.appendChild(addCell(cell));
+    rowData.forEach((cell,index) => {
+        let color = null;
+        if(index === coloredColumnIndex) {
+            color = 1;
+        }
+        row.appendChild(addCell(cell, color));
     });
     return row;
 }
@@ -49,7 +56,7 @@ function addTableRows(res){
             transaction.amount,
             transaction.transaction_status
         ]
-        tblBody.appendChild(createRow(rowData));
+        tblBody.appendChild(createRow(rowData,4));
     })
     tbl.appendChild(tblBody);
 
@@ -114,5 +121,5 @@ setInterval(() => {
     loadTransactions().then((res) => {
         addTableRows(res.data , res.role);
     })
-} , 15000);
+} , 5000);
 

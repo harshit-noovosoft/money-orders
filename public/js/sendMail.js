@@ -29,7 +29,6 @@ function createEmailTable(rows) {
     const emails =  rows;
     const tbl = document.getElementById('email-table');
     const previousRows = tbl.querySelector("tbody")
-    console.log(previousRows);
     if(previousRows) {
         previousRows.remove()
     }

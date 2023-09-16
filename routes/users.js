@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/'  ,async (req,res)=>{
     try{
         const users = await pool.query(`SELECT * FROM USERS`);
-        res.send({"rows" : users.rows,"role" : req.user.role});
+        res.send({"rows" : users.rows});
     }catch (err){
         res.status(err.status || 400).send(err.message);
     }

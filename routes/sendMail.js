@@ -11,7 +11,7 @@ router.use(express.json());
 
 const checkUserType = async (req,res,next) => {
     const role = await getRole(req.user.username);
-    if(role === 'admin') {
+    if(role === 'ADMIN') {
         res.status(400).send("Admin can't access this route right now");
     }
     next();
@@ -22,17 +22,16 @@ router.get('/' , authentication , checkUserType ,async (req , res) => {
     try {
         const username = req.user.username;
         const result = await pool.query(`
-                    SELECT user_id from users
-                    WHERE username = $1`,
+                    SELECT users.id from users
+                    WHERE users.name = $1`,
             [username]
         );
-        const userId = result.rows[0].user_id;
+        const userId = result.rows[0].id;
         const emails = await pool.query(
             `SELECT 
-                (SELECT email from users WHERE user_id = emails.sender_user_id) as sender_email,
-                (SELECT email from users WHERE user_id = emails.receiver_user_id) as receiver_email,
-                emails.no_of_entries as transaction_limit,
-                emails.status as email_status
+                (SELECT users.email from users WHERE users.id = emails.receiver_user_id) as receiver_email,
+                emails.n_of_entries as transaction_limit,
+                emails.status
             from emails
             WHERE receiver_user_id = $1` ,
             [userId]
@@ -48,16 +47,16 @@ router.post('/' , authentication, checkUserType ,async (req,res,) => {
         const username = req.user.username;
         const limit = req.body.limit;
         const result = await pool.query(`
-            SELECT user_id , email from users
-                WHERE username = $1`,
+            SELECT users.id , email from users
+                WHERE users.name = $1`,
                 [username]
         );
-        const userId = result.rows[0].user_id;
+        const userId = result.rows[0].id;
         const to_email = result.rows[0].email;
 
         const emailEntry = await pool.query(`INSERT INTO emails 
-                            (sender_user_id, receiver_user_id, no_of_entries) values 
-                                ($1,$2,$3)` , [1,userId,limit])
+                            (receiver_user_id, n_of_entries) values 
+                                ($1,$2)` , [userId,limit])
 
         res.send({status: 200});
     }catch (err){

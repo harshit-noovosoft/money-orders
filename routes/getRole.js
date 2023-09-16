@@ -7,7 +7,7 @@ const router = express.Router();
 export async function getRole(username) {
     try{
         const queryResult = await pool.query(
-            `SELECT role from users WHERE username = $1`,
+            `SELECT users.role from users WHERE users.name = $1`,
             [username]
         );
         return queryResult.rows[0].role;

@@ -7,13 +7,18 @@ async function loadTransactions() {
 
 async function fetchRole() {
     const roleResponse = await fetch(BASE_URL + "getRole");
-    const role = await roleResponse.json();
-    return role.role;
+    return await roleResponse.json();
 }
 
-fetchRole().then(role => {
-    manageUI(role);
-})
+fetchRole().then(res => {
+    manageUI(res.role);
+    setInterval(() => {
+        loadTransactions().then((res) => {
+            addTableRows(res.data);
+        })
+    } , 5000);
+});
+
 
 function addCell(value, color=null) {
     const cell = document.createElement("td");
@@ -38,7 +43,7 @@ function createRow(rowData,coloredColumnIndex) {
 }
 
 function manageUI(role) {
-    if(role !== 'admin') {
+    if(role !== 'ADMIN') {
         const element = document.getElementById('transactions');
         element.remove();
     }else {
@@ -60,11 +65,11 @@ function addTableRows(res){
     const tblBody = document.createElement("tbody");
     transactions.reverse().forEach((transaction) => {
         const rowData = [
-            transaction.transaction_type.toUpperCase(),
+            transaction.type,
             transaction.from_user || "-",
             transaction.to_user || "-",
             transaction.amount,
-            transaction.transaction_status
+            transaction.status
         ]
         tblBody.appendChild(createRow(rowData,4));
     })
@@ -128,9 +133,4 @@ document.getElementById("transfer_form").addEventListener("submit", function (e)
         .then();
 });
 
-setInterval(() => {
-    loadTransactions().then((res) => {
-        addTableRows(res.data);
-    })
-} , 5000);
 

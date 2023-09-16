@@ -1,7 +1,7 @@
 import pool from "../database_connection.js";
 
 async function getUserBalance(userId) {
-    if(userId == null) return null
+    if(userId == null) return null;
     let queryString =  `
             SELECT balance 
                 FROM accounts 
@@ -12,6 +12,7 @@ async function getUserBalance(userId) {
 }
 
 async function updateBalance(finalAmount, userId) {
+    console.log(finalAmount);
     let queryString = `
             UPDATE accounts 
                 set balance = $1 
@@ -23,17 +24,16 @@ async function updateBalance(finalAmount, userId) {
 async function processBatch(senderUserId, receiverUserId, type, amount) {
     const senderUserBalance = await getUserBalance(senderUserId).then();
     const receiverUserBalance = await getUserBalance(receiverUserId).then();
-
-    if(type === 'deposit') {
-        await updateBalance((amount + senderUserBalance), senderUserId)
+    if(type === 'DEPOSIT') {
+        await updateBalance((amount + receiverUserBalance), receiverUserId)
     }
-    else if(type === 'withdraw' || type === 'transfer') {
-        if(receiverUserBalance - amount < 0) {
-            return false
+    else if(type === 'WITHDRAW' || type === 'TRANSFER') {
+        if(senderUserBalance - amount < 0) {
+            return false;
         }else {
-            await updateBalance((receiverUserBalance - amount), receiverUserId)
-            if(type === 'transfer') {
-                await updateBalance((senderUserBalance + amount), senderUserId)
+            await updateBalance((senderUserBalance - amount), senderUserId)
+            if(type === 'TRANSFER') {
+                await updateBalance((receiverUserBalance + amount), receiverUserId)
             }
         }
     }
@@ -42,25 +42,26 @@ async function processBatch(senderUserId, receiverUserId, type, amount) {
 async function poolTransactions(limit) {
     const queryString = `
         SELECT * FROM transactions
-            WHERE status = 'pending'
-            ORDER BY transaction_id
+            WHERE transactions.status = 'PENDING'
+            ORDER BY transactions.id
             LIMIT $1
     `
     const transactions = await pool.query(queryString , [limit]);
 
+
     for (const row of transactions.rows) {
-        const transaction = await processBatch(row.to_user_id, row.from_user_id, row.transaction_type, parseInt(row.amount))
+        const transaction = await processBatch(row.from_user, row.to_user, row.type, parseInt(row.amount))
 
         let queryString = `
-            UPDATE transactions 
-                SET status = $1 
-                WHERE transaction_id = $2
+            UPDATE transactions
+                SET status = $1
+                WHERE transactions.id = $2
         `
-        let transactionResult = 'processed'
+        let transactionResult = 'PROCESSED'
         if(!transaction) {
-            transactionResult = 'failed'
+            transactionResult = 'FAILED'
         }
-        await pool.query(queryString, [ transactionResult, row.transaction_id])
+        await pool.query(queryString, [ transactionResult, row.id])
     }
 
     return {

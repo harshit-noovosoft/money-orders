@@ -1,4 +1,14 @@
-const mailBtn = document.getElementById('get-mail')
+const mailBtn = document.getElementById('get-mail');
+
+fetchRole().then(res => {
+   const role = res.role;
+   if(role === 'CUSTOMER'){
+       setInterval(() => {
+           loadNewEmails()
+       } , 5000);
+       loadNewEmails();
+   }
+});
 
 async function loadEmails() {
     const response = await fetch(BASE_URL + "sendMail");
@@ -29,32 +39,25 @@ function createEmailTable(rows) {
     const emails =  rows;
     const tbl = document.getElementById('email-table');
     const previousRows = tbl.querySelector("tbody")
-    console.log(previousRows);
     if(previousRows) {
         previousRows.remove()
     }
     const tblBody = document.createElement("tbody");
     emails.reverse().forEach((email) => {
         const rowData = [
-            email.sender_email,
             email.receiver_email,
             email.transaction_limit,
-            email.email_status
+            email.status
         ]
-        tblBody.appendChild(createRow(rowData,3));
+        tblBody.appendChild(createRow(rowData,2));
     })
     tbl.appendChild(tblBody);
 }
 
 function loadNewEmails() {
     loadEmails().then(res => {
-        if(res.role !== 'customer') return;
         createEmailTable(res.rows);
     })
 }
 
-setInterval(() => {
-    loadNewEmails()
-} , 5000);
-loadNewEmails();
 

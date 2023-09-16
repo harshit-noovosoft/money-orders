@@ -70,6 +70,7 @@ table{
 }
 
 th,td{
+    text-align: center;
     padding: 5px 20px;
     margin: 5px 0;
 }
@@ -129,14 +130,14 @@ select,input{
     margin-top: 3rem;
 }
 
-.pending{
+.PENDING{
     color: yellow;
 }
 
-.processed{
+.PROCESSED{
     color: #1da61d;
 }
 
-.failed{
+.FAILED{
     color: red;
 }

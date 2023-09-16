@@ -10,10 +10,14 @@ services:
     volumes:
       - money_order_data:/var/lib/postgresql/data
   mailhog:
-    image: mailhog/mailhog:latest
+    image: mailhog/mailhog
     restart: always
     ports:
-      - 1025:1025
-      - 8025:8025
+      - "1025:1025"
+      - "8025:8025"
+  app:
+    build: .
+    ports:
+      - "3000:3000"
 volumes:
   money_order_data:

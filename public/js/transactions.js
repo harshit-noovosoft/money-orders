@@ -1,9 +1,24 @@
 const BASE_URL = "http://localhost:3000/"
 
 async function loadTransactions() {
-    const response = await fetch(BASE_URL + "transaction");
+    const response = await fetch(BASE_URL + "transactions");
     return await response.json();
 }
+
+async function fetchRole() {
+    const roleResponse = await fetch(BASE_URL + "get-role");
+    return await roleResponse.json();
+}
+
+fetchRole().then(res => {
+    manageUI(res.role);
+    setInterval(() => {
+        loadTransactions().then((res) => {
+            addTableRows(res.data);
+        })
+    } , 5000);
+});
+
 
 function addCell(value, color=null) {
     const cell = document.createElement("td");
@@ -28,7 +43,7 @@ function createRow(rowData,coloredColumnIndex) {
 }
 
 function manageUI(role) {
-    if(role !== 'admin') {
+    if(role !== 'ADMIN') {
         const element = document.getElementById('transactions');
         element.remove();
     }else {
@@ -50,11 +65,11 @@ function addTableRows(res){
     const tblBody = document.createElement("tbody");
     transactions.reverse().forEach((transaction) => {
         const rowData = [
-            transaction.transaction_type.toUpperCase(),
+            transaction.type,
             transaction.from_user || "-",
             transaction.to_user || "-",
             transaction.amount,
-            transaction.transaction_status
+            transaction.status
         ]
         tblBody.appendChild(createRow(rowData,4));
     })
@@ -64,8 +79,9 @@ function addTableRows(res){
 }
 loadTransactions().then((res) => {
     addTableRows(res.data);
-    manageUI(res.role);
 })
+
+
 
 async function admitTransaction(type, amount, {to_user_id = null, from_user_id = null}) {
     const data = {
@@ -74,7 +90,7 @@ async function admitTransaction(type, amount, {to_user_id = null, from_user_id =
         "to_user_id": to_user_id,
         "from_user_id": from_user_id
     }
-    await fetch(BASE_URL + 'transaction', {
+    await fetch(BASE_URL + 'transactions', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"
@@ -117,9 +133,4 @@ document.getElementById("transfer_form").addEventListener("submit", function (e)
         .then();
 });
 
-setInterval(() => {
-    loadTransactions().then((res) => {
-        addTableRows(res.data , res.role);
-    })
-} , 5000);
 

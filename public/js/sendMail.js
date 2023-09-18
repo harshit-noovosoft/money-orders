@@ -1,14 +1,24 @@
-const mailBtn = document.getElementById('get-mail')
+const mailBtn = document.getElementById('get-mail');
+
+fetchRole().then(res => {
+   const role = res.role;
+   if(role === 'CUSTOMER'){
+       setInterval(() => {
+           loadNewEmails()
+       } , 5000);
+       loadNewEmails();
+   }
+});
 
 async function loadEmails() {
-    const response = await fetch(BASE_URL + "sendMail");
+    const response = await fetch(BASE_URL + "mails");
     return await response.json();
 }
 
 mailBtn.addEventListener('click', async function (e) {
     e.preventDefault()
     let limit = document.getElementById('transaction_limit').value;
-    await fetch(BASE_URL + 'sendMail', {
+    await fetch(BASE_URL + 'mails', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -35,25 +45,19 @@ function createEmailTable(rows) {
     const tblBody = document.createElement("tbody");
     emails.reverse().forEach((email) => {
         const rowData = [
-            email.sender_email,
             email.receiver_email,
             email.transaction_limit,
-            email.email_status
+            email.status
         ]
-        tblBody.appendChild(createRow(rowData,3));
+        tblBody.appendChild(createRow(rowData,2));
     })
     tbl.appendChild(tblBody);
 }
 
 function loadNewEmails() {
     loadEmails().then(res => {
-        if(res.role !== 'customer') return;
         createEmailTable(res.rows);
     })
 }
 
-setInterval(() => {
-    loadNewEmails()
-} , 5000);
-loadNewEmails();
 

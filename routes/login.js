@@ -20,14 +20,13 @@ router.post('/', async (req,res)=>{
     try{
         const user = await client.query(`SELECT *
                                          FROM users
-                                         WHERE username = ($1)`,[username]
+                                         WHERE name = ($1)`,[username.toUpperCase()]
         );
         const userPassword = user.rows[0].password;
-        const role = user.rows[0].role;
         if(!(await bcrypt.compare(password,userPassword))){
             return res.status(400).send("Invalid Password");
         }
-        const token = jwt.sign({"username" : username , "role": role}, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
+        const token = jwt.sign({"username" : username.toUpperCase()}, process.env.JWT_SECRET_KEY, {expiresIn: '1h'});
         res.cookie('access_token' , token , {httpOnly:true})
         res.send({status: 200})
     }catch (err) {

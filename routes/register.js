@@ -20,9 +20,9 @@ router.post('/' , async (req,res)=>{
     try{
         const hash_password = await bcrypt.hash(password,10);
         await client.query(`Insert into users (
-                   username, email, password) 
+                   name, email, password) 
                         values ($1,$2,$3)`,
-            [username,email,hash_password]
+            [username.toUpperCase(),email,hash_password]
         );
         const user_id = await client.query(`SELECT user_id 
                             FROM users

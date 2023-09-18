@@ -11,14 +11,14 @@ fetchRole().then(res => {
 });
 
 async function loadEmails() {
-    const response = await fetch(BASE_URL + "sendMail");
+    const response = await fetch(BASE_URL + "mails");
     return await response.json();
 }
 
 mailBtn.addEventListener('click', async function (e) {
     e.preventDefault()
     let limit = document.getElementById('transaction_limit').value;
-    await fetch(BASE_URL + 'sendMail', {
+    await fetch(BASE_URL + 'mails', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

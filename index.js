@@ -1,14 +1,9 @@
+import {transactionService} from "./services/transaction.js";
+import {emailService} from "./services/email.js";
 import express from 'express';
 import dotenv from "dotenv";
 import cookieParser from 'cookie-parser';
 dotenv.config();
-
-const app = express();
-
-app.use(express.json());
-app.use(cookieParser());
-app.use(express.static('public'));
-
 import login from "./routes/login.js";
 import register from "./routes/register.js";
 import transaction from "./routes/transaction.js";
@@ -18,33 +13,56 @@ import logout from "./routes/logout.js";
 import authentication from "./middleware/authentication.js";
 import authorization from "./middleware/authorization.js";
 import sendMail from "./routes/sendMail.js";
-import {emailService} from "./services/email.js";
-import {transactionService} from "./services/transaction.js";
 import getRoleRoute from "./routes/getRole.js";
+function runAPIs() {
 
-app.use("/login" , login);
-app.use("/register" , register);
+    const app = express();
 
-app.use(authentication,authorization);
-app.use('/getRole' , getRoleRoute);
-app.use('/sendMail' , sendMail);
-app.use('/dashboard' , dashboard);
-app.use('/sendMail' , sendMail);
-app.use("/transaction" , transaction);
-app.use("/users" , users);
-app.use("/logout" , logout);
-
-setInterval((e) => {
-    transactionService(5);
-    emailService(2);
-}, 2000);
+    app.use(express.json());
+    app.use(cookieParser());
+    app.use(express.static('public'));
 
 
+    app.use("/login" , login);
+    app.use("/register" , register);
 
-app.get('/',(req, res)=>{
-    return res.redirect('/dashboard');
-});
+    app.use(authentication,authorization);
+    app.use('/get-role' , getRoleRoute);
+    app.use('/dashboard' , dashboard);
+    app.use('/mails' , sendMail);
+    app.use("/transactions" , transaction);
+    app.use("/users" , users);
+    app.use("/logout" , logout);
 
-app.listen(process.env.PORT , (req,res)=>{
-    console.log(`Server running on PORT ${process.env.PORT}`);
-});
+    app.get('/',(req, res)=>{
+        return res.redirect('/dashboard');
+    });
+
+    app.listen(process.env.PORT , (req,res)=>{
+        console.log(`Server running on PORT ${process.env.PORT}`);
+    });
+}
+
+function processTransactions() {
+    setInterval((e) => {
+        transactionService(5);
+    }, 2000);
+}
+function processEmails() {
+    setInterval((e) => {
+        emailService(2);
+    }, 2000);
+}
+
+runAPIs();
+processTransactions();
+processEmails();
+// if(process.env.APP === 'api'){
+//     runAPIs();
+// }
+// else if(process.env.APP === 'transaction'){
+//     processTransactions();
+// }
+// else {
+//     processEmails();
+// }

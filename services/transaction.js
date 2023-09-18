@@ -12,7 +12,6 @@ async function getUserBalance(userId) {
 }
 
 async function updateBalance(finalAmount, userId) {
-    console.log(finalAmount);
     let queryString = `
             UPDATE accounts 
                 set balance = $1 

@@ -1,12 +1,12 @@
 const BASE_URL = "http://localhost:3000/"
 
 async function loadTransactions() {
-    const response = await fetch(BASE_URL + "transaction");
+    const response = await fetch(BASE_URL + "transactions");
     return await response.json();
 }
 
 async function fetchRole() {
-    const roleResponse = await fetch(BASE_URL + "getRole");
+    const roleResponse = await fetch(BASE_URL + "get-role");
     return await roleResponse.json();
 }
 
@@ -90,7 +90,7 @@ async function admitTransaction(type, amount, {to_user_id = null, from_user_id =
         "to_user_id": to_user_id,
         "from_user_id": from_user_id
     }
-    await fetch(BASE_URL + 'transaction', {
+    await fetch(BASE_URL + 'transactions', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json"

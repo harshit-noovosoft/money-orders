@@ -19,5 +19,19 @@ services:
     build: .
     ports:
       - "3000:3000"
+    environment:
+      APP: api
+  transactions:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      APP: transaction
+  emails:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      APP: email
 volumes:
   money_order_data:

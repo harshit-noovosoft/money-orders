@@ -24,6 +24,16 @@ router.post('/' , async (req,res)=>{
                         values ($1,$2,$3)`,
             [username,email,hash_password]
         );
+        const user_id = await client.query(`SELECT user_id 
+                            FROM users
+                            WHERE username = $1`,
+            [username]
+        );
+        await client.query(`INSERT INTO accounts(user_id)  
+                            values($1)`,
+            [user_id.rows[0].user_id]
+        );
+
         res.send({status: 200});
     }catch (err){
         res.status(err.status || 400).send(err.message);

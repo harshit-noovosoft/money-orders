@@ -34,11 +34,11 @@ router.get('/' , authentication , checkUserType ,async (req , res) => {
                 emails.status
             from emails
             WHERE receiver_user_id = $1
-            ORDER BY status DESC, email_id;
+            ORDER BY status DESC, id;
             ` ,
             [userId]
         )
-        res.send({"rows" : emails.rows});
+        res.send({rows : emails.rows , status: 200});
     }catch (err){
         res.sendStatus(500).send(err.message);
     }

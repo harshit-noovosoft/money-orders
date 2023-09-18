@@ -24,9 +24,9 @@ router.post('/' , async (req,res)=>{
                         values ($1,$2,$3)`,
             [username.toUpperCase(),email,hash_password]
         );
-        const user_id = await client.query(`SELECT user_id 
+        const user_id = await client.query(`SELECT id 
                             FROM users
-                            WHERE username = $1`,
+                            WHERE name = $1`,
             [username]
         );
         await client.query(`INSERT INTO accounts(user_id)  

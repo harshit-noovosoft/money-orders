@@ -19,15 +19,15 @@ router.get('/'  ,async (req,res)=>{
     try{
         const username = req.user.username;
         const role = await getRole(username);
-        const {timestamp} = req.query;
+        const {latestId} = req.query;
         let whereClause = '';
         let userId;
         if(role === 'CUSTOMER') {
-            userId = await pool.query(`SELECT id from users 
-                                                WHERE name = $1` , [username]);
+            userId = await pool.query(`SELECT id from users
+                                       WHERE name = $1` , [username]);
             whereClause = ` and from_user = ${userId.rows[0].id} or to_user = ${userId.rows[0].id}`;
         }
-        const queryString = `SELECT jobs.type,
+        const queryString = `SELECT jobs.id,jobs.type,
                                     (SELECT users.name
                                      from users
                                      where users.id = jobs.from_user)
@@ -40,10 +40,10 @@ router.get('/'  ,async (req,res)=>{
                                     jobs.status,
                                     jobs.timestamp
                              from jobs
-                             WHERE (type = $1 or type = $2 or type = $3) and 
-                                   (EXTRACT(EPOCH FROM (timestamp-$4))) > 0` + `${whereClause}` +
-            ` ORDER BY status DESC, id`;
-        const transactions = await pool.query(queryString,['DEPOSIT','WITHDRAW','TRANSFER', timestamp]);
+                             WHERE (type = $1 or type = $2 or type = $3) and
+                                 jobs.id > $4` + `${whereClause}` +
+            ` ORDER BY jobs.id DESC`;
+        const transactions = await pool.query(queryString,['DEPOSIT','WITHDRAW','TRANSFER', latestId]);
         res.send({"data" : transactions.rows});
     }catch (err){
         res.status(err.status || 400).send(err.message);

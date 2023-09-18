@@ -29,12 +29,12 @@ router.get('/' , authentication , checkUserType ,async (req , res) => {
         const userId = result.rows[0].id;
         const emails = await pool.query(
             `SELECT 
-                (SELECT users.email from users WHERE users.id = emails.receiver_user_id) as receiver_email,
-                emails.n_of_entries as transaction_limit,
-                emails.status
-            from emails
-            WHERE receiver_user_id = $1` ,
-            [userId]
+                (SELECT users.email from users WHERE users.id = jobs.receiver_user_id) as receiver_email,
+                jobs.n_of_entries as transaction_limit,
+                jobs.status
+            from jobs
+            WHERE receiver_user_id = $1 and type = $2`,
+            [userId,'EMAIL']
         )
         res.send({"rows" : emails.rows});
     }catch (err){
@@ -54,9 +54,9 @@ router.post('/' , authentication, checkUserType ,async (req,res,) => {
         const userId = result.rows[0].id;
         const to_email = result.rows[0].email;
 
-        const emailEntry = await pool.query(`INSERT INTO emails 
-                            (receiver_user_id, n_of_entries) values 
-                                ($1,$2)` , [userId,limit])
+        const emailEntry = await pool.query(`INSERT INTO jobs 
+                            (receiver_user_id, n_of_entries ,type) values 
+                                ($1,$2,$3)` , [userId,limit,'EMAIL'])
 
         res.send({status: 200});
     }catch (err){

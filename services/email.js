@@ -62,16 +62,16 @@ async function processEmail(receiverUserId, entries) {
         const rows_limit = entries
 
         const queryString = `
-                    SELECT transactions.type as "Type",
+                    SELECT jobs.type as "Type",
                                 (SELECT users.name from users
-                                 where users.id = transactions.from_user)
+                                 where users.id = jobs.from_user)
                                                               as "From" ,
                                 (SELECT users.name from users
-                                 where users.id = transactions.to_user)
-                                                              as "To", transactions.amount as "Amount"
-                         from transactions
+                                 where users.id = jobs.to_user)
+                                                              as "To", jobs.amount as "Amount"
+                         from jobs
                          WHERE from_user = $1 or to_user = $1
-                         ORDER BY transactions.id DESC
+                         ORDER BY jobs.id DESC
                          LIMIT $2`
         const transactions = await pool.query(queryString , [userId, rows_limit]);
         const allTransactions = generateTabularFormOfData(transactions.rows);
@@ -90,9 +90,9 @@ async function processEmail(receiverUserId, entries) {
 
 async function poolEmails(limit) {
     const queryString = `
-        SELECT * FROM emails
-            WHERE status = 'PENDING'
-            ORDER BY emails.id
+        SELECT * FROM jobs
+            WHERE status = 'PENDING' and type = 'EMAIL'
+            ORDER BY jobs.id
             LIMIT $1
     `
     const emails = await pool.query(queryString, [limit]);
@@ -100,9 +100,9 @@ async function poolEmails(limit) {
         const emailResult = await processEmail(email.receiver_user_id, email.n_of_entries)
 
         let queryString = `
-            UPDATE emails 
+            UPDATE jobs 
                 SET status = $1 
-                WHERE emails.id = $2
+                WHERE jobs.id = $2
         `
         let transactionResult = 'PROCESSED'
         if(!emailResult) {

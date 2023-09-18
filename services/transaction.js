@@ -40,9 +40,9 @@ async function processBatch(senderUserId, receiverUserId, type, amount) {
 }
 async function poolTransactions(limit) {
     const queryString = `
-        SELECT * FROM transactions
-            WHERE transactions.status = 'PENDING'
-            ORDER BY transactions.id
+        SELECT * FROM jobs
+            WHERE jobs.status = 'PENDING' and jobs.type in ('DEPOSIT','WITHDRAW','TRANSFER')
+            ORDER BY jobs.id
             LIMIT $1
     `
     const transactions = await pool.query(queryString , [limit]);
@@ -52,9 +52,9 @@ async function poolTransactions(limit) {
         const transaction = await processBatch(row.from_user, row.to_user, row.type, parseInt(row.amount))
 
         let queryString = `
-            UPDATE transactions
+            UPDATE jobs
                 SET status = $1
-                WHERE transactions.id = $2
+                WHERE jobs.id = $2
         `
         let transactionResult = 'PROCESSED'
         if(!transaction) {

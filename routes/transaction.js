@@ -19,24 +19,31 @@ router.get('/'  ,async (req,res)=>{
     try{
         const username = req.user.username;
         const role = await getRole(username);
+        const {timestamp} = req.query;
         let whereClause = '';
         let userId;
         if(role === 'CUSTOMER') {
             userId = await pool.query(`SELECT id from users 
                                                 WHERE name = $1` , [username]);
-            whereClause = `WHERE from_user = ${userId.rows[0].id} or to_user = ${userId.rows[0].id}`;
+            whereClause = ` and from_user = ${userId.rows[0].id} or to_user = ${userId.rows[0].id}`;
         }
-        const queryString = `SELECT transactions.id,
-                                                      transactions.type,
-                                                      (SELECT users.name from users 
-                                                                       where users.id = transactions.from_user) 
-                                                          as from_user,
-                                                      (SELECT users.name from users 
-                                                                       where users.id = transactions.to_user)   
-                                                          as to_user, transactions.amount , transactions.status
-                                               from transactions` + ` ${whereClause}` +
-                                                ` ORDER BY status DESC, id `;
-        const transactions = await pool.query(queryString);
+        const queryString = `SELECT jobs.type,
+                                    (SELECT users.name
+                                     from users
+                                     where users.id = jobs.from_user)
+                                        as from_user,
+                                    (SELECT users.name
+                                     from users
+                                     where users.id = jobs.to_user)
+                                        as to_user,
+                                    jobs.amount,
+                                    jobs.status,
+                                    jobs.timestamp
+                             from jobs
+                             WHERE (type = $1 or type = $2 or type = $3) and 
+                                   (EXTRACT(EPOCH FROM (timestamp-$4))) > 0` + `${whereClause}` +
+                                                ` ORDER BY status DESC, id`;
+        const transactions = await pool.query(queryString,['DEPOSIT','WITHDRAW','TRANSFER', timestamp]);
         res.send({"data" : transactions.rows});
     }catch (err){
         res.status(err.status || 400).send(err.message);
@@ -46,7 +53,7 @@ router.get('/'  ,async (req,res)=>{
 router.post('/' , operationalMiddleware ,async (req,res)=>{
     const { from_user_id , amount , type , to_user_id} = req.body;
     try{
-        await pool.query(`Insert into transactions (
+        await pool.query(`Insert into jobs (
                     type, from_user, to_user,amount)
                           values ($1,$2,$3,$4)`,
             [type.toUpperCase(),from_user_id,to_user_id,amount]

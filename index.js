@@ -1,5 +1,3 @@
-import {transactionService} from "./services/transaction.js";
-import {emailService} from "./services/email.js";
 import express from 'express';
 import dotenv from "dotenv";
 import cookieParser from 'cookie-parser';
@@ -14,6 +12,7 @@ import authentication from "./middleware/authentication.js";
 import authorization from "./middleware/authorization.js";
 import sendMail from "./routes/sendMail.js";
 import getRoleRoute from "./routes/getRole.js";
+import {jobService} from "./services/processJob.js";
 function runAPIs() {
 
     const app = express();
@@ -43,17 +42,6 @@ function runAPIs() {
     });
 }
 
-function processTransactions() {
-    setInterval((e) => {
-        transactionService(5);
-    }, 2000);
-}
-function processEmails() {
-    setInterval((e) => {
-        emailService(2);
-    }, 2000);
-}
 
 runAPIs();
-processTransactions();
-processEmails();
+jobService(5);

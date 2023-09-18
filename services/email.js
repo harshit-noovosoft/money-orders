@@ -1,6 +1,5 @@
 import pool from "../database_connection.js";
 import nodemailer from "nodemailer";
-
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -50,7 +49,7 @@ function generateTabularFormOfData(transaction) {
         `
 }
 
-async function processEmail(receiverUserId, entries) {
+export async function processEmail(receiverUserId, entries) {
     try{
         const result = await pool.query(`
         SELECT users.id , email from users
@@ -88,33 +87,33 @@ async function processEmail(receiverUserId, entries) {
     }
 }
 
-async function poolEmails(limit) {
-    const queryString = `
-        SELECT * FROM jobs
-            WHERE status = 'PENDING' and type = 'EMAIL'
-            ORDER BY jobs.id
-            LIMIT $1
-    `
-    const emails = await pool.query(queryString, [limit]);
-    for (const email of emails.rows) {
-        const emailResult = await processEmail(email.receiver_user_id, email.n_of_entries)
-
-        let queryString = `
-            UPDATE jobs 
-                SET status = $1 
-                WHERE jobs.id = $2
-        `
-        let transactionResult = 'PROCESSED'
-        if(!emailResult) {
-            transactionResult = 'FAILED'
-        }
-        await pool.query(queryString, [ transactionResult, email.id])
-    }
-    return {
-        status: 200
-    }
-}
-
-export function emailService(batchSize) {
-    poolEmails(batchSize).then();
-}
+// async function poolEmails(limit) {
+//     const queryString = `
+//         SELECT * FROM jobs
+//             WHERE status = 'PENDING' and type = 'EMAIL'
+//             ORDER BY jobs.id
+//             LIMIT $1
+//     `
+//     const emails = await pool.query(queryString, [limit]);
+//     for (const email of emails.rows) {
+//         const emailResult = await processEmail(email.receiver_user_id, email.n_of_entries)
+//
+//         let queryString = `
+//             UPDATE jobs
+//                 SET status = $1
+//                 WHERE jobs.id = $2
+//         `
+//         let transactionResult = 'PROCESSED'
+//         if(!emailResult) {
+//             transactionResult = 'FAILED'
+//         }
+//         await pool.query(queryString, [ transactionResult, email.id])
+//     }
+//     return {
+//         status: 200
+//     }
+// }
+//
+// export function emailService(batchSize) {
+//     poolEmails(batchSize).then();
+// }

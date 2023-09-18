@@ -16,7 +16,7 @@ registerForm.addEventListener('submit', async function (e) {
         body: JSON.stringify(data)
     }).then((res) => {
         if(res.status === 200) {
-            window.location.href = BASE_URL + 'dashboard'
+            window.location.href = BASE_URL + 'login'
         }else {
             alert('wrong user id or password')
         }

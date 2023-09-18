@@ -42,7 +42,7 @@ router.get('/'  ,async (req,res)=>{
                              from jobs
                              WHERE (type = $1 or type = $2 or type = $3) and 
                                    (EXTRACT(EPOCH FROM (timestamp-$4))) > 0` + `${whereClause}` +
-                                                ` ORDER BY status DESC, id`;
+            ` ORDER BY status DESC, id`;
         const transactions = await pool.query(queryString,['DEPOSIT','WITHDRAW','TRANSFER', timestamp]);
         res.send({"data" : transactions.rows});
     }catch (err){

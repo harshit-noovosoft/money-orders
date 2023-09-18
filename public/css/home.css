@@ -30,11 +30,12 @@ body {
 }
 .heading{
     text-align: center;
-    color: var(--heading-color);
+    color: black;
 }
 
 .container{
     margin: 20px;
+    max-width: 100%;
 }
 
 .flex{
@@ -44,11 +45,12 @@ body {
 }
 
 .data-tables{
-    margin: 50px;
+    margin: 30px;
+    max-width: 40rem;
 }
 
 .data-tables div {
-    overflow-y: scroll;
+    overflow: scroll;
     max-height: 22rem;
     min-height: 1rem;
     box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
@@ -90,22 +92,24 @@ th,td{
 
 }
 
-input[type=text]{
-    width: 60px;
+
+input, select {
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 1rem;
+    border-radius: 10px;
+    outline: none;
+    border: 0 solid transparent;
+    box-shadow: rgba(0, 0, 0, 0.1) 0 5px 5px, rgba(0, 0, 0, 0.11) 0 3px 3px;
 }
 
-input[type=submit]{
-    padding: 10px 20px;
-    background-color: var(--body-bg-color);
-    border: none;
-    border-radius: 5px;
-    color: black;
-    font-size: 16px;
+input:focus, select:focus {
+    box-shadow: rgba(0, 0, 0, 0.19) 0 10px 20px, rgba(0, 0, 0, 0.23) 0 6px 6px;
 }
 
 input[type=submit]:hover{
     background-color: var(--hover-bg-color);
 }
+
 select{
     width: 20%;
     padding: 5px 10px;

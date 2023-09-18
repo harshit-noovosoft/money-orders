@@ -138,4 +138,3 @@ document.getElementById("transfer_form").addEventListener("submit", function (e)
         .then();
 });
 
-

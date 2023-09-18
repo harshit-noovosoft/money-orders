@@ -36,7 +36,7 @@ router.get('/' , authentication , checkUserType ,async (req , res) => {
             WHERE receiver_user_id = $1 and type = $2`,
             [userId,'EMAIL']
         )
-        res.send({"rows" : emails.rows});
+        res.send({rows : emails.rows , status: 200});
     }catch (err){
         res.sendStatus(500).send(err.message);
     }
@@ -49,7 +49,7 @@ router.post('/' , authentication, checkUserType ,async (req,res,) => {
         const result = await pool.query(`
             SELECT users.id , email from users
                 WHERE users.name = $1`,
-                [username]
+            [username]
         );
         const userId = result.rows[0].id;
         const to_email = result.rows[0].email;

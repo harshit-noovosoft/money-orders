@@ -56,8 +56,9 @@ function createEmailTable(rows) {
 
 function loadNewEmails() {
     loadEmails().then(res => {
-        createEmailTable(res.rows);
-    })
+        if(res.status === 200) createEmailTable(res.rows);
+        else alert("Server Error");
+    });
 }
 
 

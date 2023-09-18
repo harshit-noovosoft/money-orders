@@ -1,7 +1,8 @@
 const BASE_URL = "http://localhost:3000/"
+let prevTimeStamp = '1970-01-01 00:00:00';
 
 async function loadTransactions() {
-    const response = await fetch(BASE_URL + "transactions");
+    const response = await fetch(BASE_URL + "transactions" + "?timestamp=" + prevTimeStamp);
     return await response.json();
 }
 
@@ -14,6 +15,8 @@ fetchRole().then(res => {
     manageUI(res.role);
     setInterval(() => {
         loadTransactions().then((res) => {
+            prevTimeStamp = (res.data.slice(-1)[0].timestamp).replace('T',' ');
+            console.log(res.data);
             addTableRows(res.data);
         })
     } , 5000);
@@ -78,6 +81,7 @@ function addTableRows(res){
 
 }
 loadTransactions().then((res) => {
+    prevTimeStamp = (res.data.slice(-1)[0].timestamp).replace('T',' ');
     addTableRows(res.data);
 })
 
@@ -98,6 +102,7 @@ async function admitTransaction(type, amount, {to_user_id = null, from_user_id =
         body: JSON.stringify(data)
     }).then(ress => {
         loadTransactions().then((res) => {
+            prevTimeStamp = (res.data.slice(-1)[0].timestamp).replace('T',' ');
             addTableRows(res.data);
         })
         return ress.json();
@@ -132,5 +137,4 @@ document.getElementById("transfer_form").addEventListener("submit", function (e)
     })
         .then();
 });
-
 

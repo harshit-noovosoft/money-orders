@@ -57,12 +57,3 @@ function processEmails() {
 runAPIs();
 processTransactions();
 processEmails();
-// if(process.env.APP === 'api'){
-//     runAPIs();
-// }
-// else if(process.env.APP === 'transaction'){
-//     processTransactions();
-// }
-// else {
-//     processEmails();
-// }

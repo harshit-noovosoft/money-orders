@@ -1,5 +1,4 @@
 import express from "express";
-import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 import authentication from "../middleware/authentication.js";
 import pool from "../database_connection.js";
@@ -21,6 +20,7 @@ const checkUserType = async (req,res,next) => {
 router.get('/' , authentication , checkUserType ,async (req , res) => {
     try {
         const username = req.user.username;
+        const {latestId} = req.query;
         const result = await pool.query(`
                     SELECT users.id from users
                     WHERE users.name = $1`,
@@ -28,13 +28,13 @@ router.get('/' , authentication , checkUserType ,async (req , res) => {
         );
         const userId = result.rows[0].id;
         const emails = await pool.query(
-            `SELECT 
+            `SELECT jobs.id,
                 (SELECT users.email from users WHERE users.id = jobs.receiver_user_id) as receiver_email,
                 jobs.n_of_entries as transaction_limit,
                 jobs.status
             from jobs
-            WHERE receiver_user_id = $1 and type = $2`,
-            [userId,'EMAIL']
+            WHERE receiver_user_id = $1 and type = $2 and jobs.id > $3`,
+            [userId,'EMAIL',latestId]
         )
         res.send({rows : emails.rows , status: 200});
     }catch (err){

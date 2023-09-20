@@ -25,7 +25,7 @@ router.get('/'  ,async (req,res)=>{
         if(role === 'CUSTOMER') {
             userId = await pool.query(`SELECT id from users
                                        WHERE name = $1` , [username]);
-            whereClause = ` and from_user = ${userId.rows[0].id} or to_user = ${userId.rows[0].id}`;
+            whereClause = ` and (from_user = ${userId.rows[0].id} or to_user = ${userId.rows[0].id})`;
         }
         const queryString = `SELECT jobs.id,jobs.type,
                                     (SELECT users.name

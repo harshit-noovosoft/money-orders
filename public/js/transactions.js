@@ -16,7 +16,7 @@ fetchRole().then(res => {
     setInterval(() => {
         loadTransactions().then((res) => {
             //prevTimeStamp = (res.data.slice(-1)[0].timestamp).replace('T',' ');
-            addTableRows(res.data);
+            createTransactionTable(res.data);
         })
     } , 2000);
 });
@@ -62,9 +62,8 @@ function manageUI(role) {
 }
 
 
-function addTableRows(res){
+function createTransactionTable(res){
     const transactions =  res
-
     const tblBody = document.getElementById("jobs-table-body");
     transactions.forEach((transaction) => {
         if(transaction.status !== 'PENDING') {
@@ -82,7 +81,7 @@ function addTableRows(res){
 
 }
 loadTransactions().then((res) => {
-    addTableRows(res.data);
+    createTransactionTable(res.data);
 })
 
 
@@ -102,7 +101,7 @@ async function admitTransaction(type, amount, {to_user_id = null, from_user_id =
         body: JSON.stringify(data)
     }).then(ress => {
         loadTransactions().then((res) => {
-            addTableRows(res.data);
+            createTransactionTable(res.data);
         })
         return ress.json();
     })

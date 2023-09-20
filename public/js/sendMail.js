@@ -10,6 +10,15 @@ fetchRole().then(res => {
    }
 });
 
+function toggleMailBtn(status) {
+    const mailBtn = document.getElementById('get-mail')
+    if(status) {
+        mailBtn.setAttribute('disabled', '')
+    }else {
+        mailBtn.removeAttribute('disabled')
+    }
+}
+
 async function loadEmails() {
     const response = await fetch(BASE_URL + "mails/?latestId=" + latestEmailId);
     return await response.json();
@@ -37,17 +46,20 @@ mailBtn.addEventListener('click', async function (e) {
 
 function createEmailTable(rows) {
     const emails =  rows;
+    let pendingEmails = false
     const tblBody = document.getElementById("emails-table-body")
     emails.forEach((email) => {
         if(email.status !== 'PENDING') {
             latestEmailId = Math.max(email.id, latestEmailId)
+        }else if(email.status === 'PENDING') {
+            pendingEmails = true
         }
-        console.log(email.id)
         const rowData = [
             email.receiver_email,
             email.transaction_limit,
             email.status
         ]
+        toggleMailBtn(pendingEmails)
         tblBody.prepend(createRow(rowData,2, email.id));
     })
 }

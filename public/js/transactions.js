@@ -36,7 +36,6 @@ function createRow(rowData,coloredColumnIndex, id = null) {
     const row = document.createElement("tr");
     row.setAttribute('id', id)
     const check = document.getElementById(id)
-    console.log(check)
     if(check) {
         check.remove()
     }
@@ -65,14 +64,12 @@ function manageUI(role) {
 
 function addTableRows(res){
     const transactions =  res
-    const tbl = document.getElementById('transaction_data');
 
     const tblBody = document.getElementById("jobs-table-body");
     transactions.forEach((transaction) => {
         if(transaction.status !== 'PENDING') {
             latestTransactionId = Math.max(transaction.id, latestTransactionId)
         }
-        console.log(transactions)
         const rowData = [
             transaction.type,
             transaction.from_user || "-",
@@ -85,7 +82,6 @@ function addTableRows(res){
 
 }
 loadTransactions().then((res) => {
-    //prevTimeStamp = (res.data.slice(-1)[0].timestamp).replace('T',' ');
     addTableRows(res.data);
 })
 
@@ -106,7 +102,6 @@ async function admitTransaction(type, amount, {to_user_id = null, from_user_id =
         body: JSON.stringify(data)
     }).then(ress => {
         loadTransactions().then((res) => {
-            //prevTimeStamp = (res.data.slice(-1)[0].timestamp).replace('T',' ');
             addTableRows(res.data);
         })
         return ress.json();

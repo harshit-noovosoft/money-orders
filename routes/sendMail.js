@@ -31,9 +31,12 @@ router.get('/' , authentication , checkUserType ,async (req , res) => {
             `SELECT 
                 (SELECT users.email from users WHERE users.id = jobs.receiver_user_id) as receiver_email,
                 jobs.n_of_entries as transaction_limit,
-                jobs.status
+                jobs.status,
+                jobs.id
             from jobs
-            WHERE receiver_user_id = $1 and type = $2`,
+            WHERE receiver_user_id = $1 and type = $2
+            ORDER BY id
+            `,
             [userId,'EMAIL']
         )
         res.send({rows : emails.rows , status: 200});

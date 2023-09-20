@@ -1,5 +1,5 @@
 const mailBtn = document.getElementById('get-mail');
-
+let latestEmailId = 0
 fetchRole().then(res => {
    const role = res.role;
    if(role === 'CUSTOMER'){
@@ -11,7 +11,7 @@ fetchRole().then(res => {
 });
 
 async function loadEmails() {
-    const response = await fetch(BASE_URL + "mails");
+    const response = await fetch(BASE_URL + "mails/?latestId=" + latestEmailId);
     return await response.json();
 }
 
@@ -37,21 +37,19 @@ mailBtn.addEventListener('click', async function (e) {
 
 function createEmailTable(rows) {
     const emails =  rows;
-    const tbl = document.getElementById('email-table');
-    const previousRows = tbl.querySelector("tbody")
-    if(previousRows) {
-        previousRows.remove()
-    }
-    const tblBody = document.createElement("tbody");
-    emails.reverse().forEach((email) => {
+    const tblBody = document.getElementById("emails-table-body")
+    emails.forEach((email) => {
+        if(email.status !== 'PENDING') {
+            latestEmailId = Math.max(email.id, latestEmailId)
+        }
+        console.log(email.id)
         const rowData = [
             email.receiver_email,
             email.transaction_limit,
             email.status
         ]
-        tblBody.appendChild(createRow(rowData,2));
+        tblBody.prepend(createRow(rowData,2, email.id));
     })
-    tbl.appendChild(tblBody);
 }
 
 function loadNewEmails() {

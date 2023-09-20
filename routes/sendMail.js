@@ -33,7 +33,8 @@ router.get('/' , authentication , checkUserType ,async (req , res) => {
                 jobs.n_of_entries as transaction_limit,
                 jobs.status
             from jobs
-            WHERE receiver_user_id = $1 and type = $2 and jobs.id > $3`,
+            WHERE receiver_user_id = $1 and type = $2 and jobs.id > $3
+            ORDER BY id`,
             [userId,'EMAIL',latestId]
         )
         res.send({rows : emails.rows , status: 200});

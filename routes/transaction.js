@@ -42,7 +42,7 @@ router.get('/'  ,async (req,res)=>{
                              from jobs
                              WHERE (type = $1 or type = $2 or type = $3) and
                                  jobs.id > $4` + `${whereClause}` +
-            ` ORDER BY jobs.id DESC`;
+            ` ORDER BY jobs.id`;
         const transactions = await pool.query(queryString,['DEPOSIT','WITHDRAW','TRANSFER', latestId]);
         res.send({"data" : transactions.rows});
     }catch (err){

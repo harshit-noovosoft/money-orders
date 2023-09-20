@@ -1,8 +1,8 @@
 const BASE_URL = "http://localhost:3000/"
-let prevTimeStamp = '1970-01-01 00:00:00';
+let latestTransactionId = 0;
 
 async function loadTransactions() {
-    const response = await fetch(BASE_URL + "transactions" + "?timestamp=" + prevTimeStamp);
+    const response = await fetch(BASE_URL + "transactions" + "?latestId=" + latestTransactionId);
     return await response.json();
 }
 
@@ -15,11 +15,10 @@ fetchRole().then(res => {
     manageUI(res.role);
     setInterval(() => {
         loadTransactions().then((res) => {
-            prevTimeStamp = (res.data.slice(-1)[0].timestamp).replace('T',' ');
-            console.log(res.data);
+            //prevTimeStamp = (res.data.slice(-1)[0].timestamp).replace('T',' ');
             addTableRows(res.data);
         })
-    } , 5000);
+    } , 2000);
 });
 
 
@@ -33,8 +32,13 @@ function addCell(value, color=null) {
     return cell;
 }
 
-function createRow(rowData,coloredColumnIndex) {
+function createRow(rowData,coloredColumnIndex, id = null) {
     const row = document.createElement("tr");
+    row.setAttribute('id', id)
+    const check = document.getElementById(id)
+    if(check) {
+        check.remove()
+    }
     rowData.forEach((cell,index) => {
         let color = null;
         if(index === coloredColumnIndex) {
@@ -60,13 +64,12 @@ function manageUI(role) {
 
 function addTableRows(res){
     const transactions =  res
-    const tbl = document.getElementById('transaction_data');
-    const previousRows = tbl.querySelector("tbody")
-    if(previousRows) {
-        previousRows.remove()
-    }
-    const tblBody = document.createElement("tbody");
-    transactions.reverse().forEach((transaction) => {
+
+    const tblBody = document.getElementById("jobs-table-body");
+    transactions.forEach((transaction) => {
+        if(transaction.status !== 'PENDING') {
+            latestTransactionId = Math.max(transaction.id, latestTransactionId)
+        }
         const rowData = [
             transaction.type,
             transaction.from_user || "-",
@@ -74,14 +77,11 @@ function addTableRows(res){
             transaction.amount,
             transaction.status
         ]
-        tblBody.appendChild(createRow(rowData,4));
+        tblBody.prepend(createRow(rowData,4, transaction.id));
     })
-    tbl.appendChild(tblBody);
-
 
 }
 loadTransactions().then((res) => {
-    prevTimeStamp = (res.data.slice(-1)[0].timestamp).replace('T',' ');
     addTableRows(res.data);
 })
 
@@ -102,7 +102,6 @@ async function admitTransaction(type, amount, {to_user_id = null, from_user_id =
         body: JSON.stringify(data)
     }).then(ress => {
         loadTransactions().then((res) => {
-            prevTimeStamp = (res.data.slice(-1)[0].timestamp).replace('T',' ');
             addTableRows(res.data);
         })
         return ress.json();
